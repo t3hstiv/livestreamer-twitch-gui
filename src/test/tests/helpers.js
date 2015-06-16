@@ -1,6 +1,8 @@
 define([
+	"QUnit",
 	"utils/ember/helpers"
 ], function(
+	QUnit,
 	helpers
 ) {
 

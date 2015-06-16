@@ -1,7 +1,9 @@
 define([
+	"QUnit",
 	"ember",
 	"utils/linkmatching"
 ], function(
+	QUnit,
 	Ember,
 	linkmatching
 ) {
