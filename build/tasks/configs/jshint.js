@@ -10,7 +10,7 @@ module.exports = {
 		options: {
 			jshintrc: "src/test/.jshintrc"
 		},
-		src    : [ "src/test/**/*.js" ]
+		src    : [ "src/test/*.js", "src/test/**/*.js", "!src/test/src/**" ]
 	},
 
 	tasks: {

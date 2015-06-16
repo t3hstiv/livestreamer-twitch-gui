@@ -5,8 +5,7 @@ dev:
     - "concurrent:runbuild"
 test:
     - "jshint:test"
-    - "connect:test"
-    - "qunit"
+    - "runtest"
 build:
     - "jshint:tasks"
     - "jshint:app"
