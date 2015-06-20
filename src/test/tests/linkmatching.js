@@ -1,6 +1,6 @@
 define([
 	"QUnit",
-	"ember",
+	"Ember",
 	"utils/linkmatching"
 ], function(
 	QUnit,

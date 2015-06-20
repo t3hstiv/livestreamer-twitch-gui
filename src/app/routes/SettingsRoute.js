@@ -1,11 +1,12 @@
-define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
 
 	var get = Ember.get;
 
 	return Ember.Route.extend({
 		model: function() {
+			var settings = get( this, "settings" );
 			return ObjectBuffer.create({
-				content: this.settings
+				content: settings
 			});
 		},
 

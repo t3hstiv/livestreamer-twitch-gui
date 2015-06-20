@@ -1,5 +1,7 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
+	var get = Ember.get;
+	var set = Ember.set;
 	var attr = DS.attr;
 
 	return DS.Model.extend({
@@ -20,6 +22,7 @@ define( [ "ember-data" ], function( DS ) {
 		gui_openchat        : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
+		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),
@@ -32,17 +35,17 @@ define( [ "ember-data" ], function( DS ) {
 
 		// correct old value
 		gui_minimize_observer: function() {
-			if ( isNaN( this.get( "gui_minimize" ) ) ) {
-				this.set( "gui_minimize", 0 );
+			if ( isNaN( get( this, "gui_minimize" ) ) ) {
+				set( this, "gui_minimize", 0 );
 			}
 		}.observes( "gui_minimize" ),
 
 		isVisibleInTaskbar: function() {
-			return ( this.get( "gui_integration" ) & 1 ) > 0;
+			return ( get( this, "gui_integration" ) & 1 ) > 0;
 		}.property( "gui_integration" ),
 
 		isVisibleInTray: function() {
-			return ( this.get( "gui_integration" ) & 2 ) > 0;
+			return ( get( this, "gui_integration" ) & 2 ) > 0;
 		}.property( "gui_integration" )
 
 	}).reopenClass({

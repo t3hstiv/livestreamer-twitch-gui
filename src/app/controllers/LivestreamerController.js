@@ -1,16 +1,16 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"ember",
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
 	"mixins/ChannelMixin",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
 	"utils/semver"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
-	Ember,
 	ChannelMixin,
 	ChannelSettingsMixin,
 	which,
@@ -25,6 +25,8 @@ define([
 	    set  = Ember.set,
 	    setP = Ember.setProperties,
 	    run  = Ember.run;
+
+	var alias = Ember.computed.alias;
 
 	var isWin = process.platform === "win32";
 
@@ -66,7 +68,7 @@ define([
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 
-		config: Ember.computed.alias( "metadata.config" ),
+		config: alias( "metadata.config" ),
 
 		modalBtns: null,
 

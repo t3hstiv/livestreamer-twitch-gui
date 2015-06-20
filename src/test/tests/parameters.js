@@ -1,7 +1,7 @@
 /* jshint quotmark:false */
 define([
 	"QUnit",
-	"ember",
+	"Ember",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution"

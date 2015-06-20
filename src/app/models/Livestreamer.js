@@ -1,6 +1,6 @@
 define([
-	"ember",
-	"ember-data",
+	"Ember",
+	"EmberData",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution"
@@ -12,18 +12,21 @@ define([
 	Substitution
 ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
+	var alias = Ember.computed.alias;
 
 	/**
 	 * @class Livestreamer
 	 */
 	return DS.Model.extend({
-		stream      : DS.belongsTo( "twitchStream" ),
-		channel     : DS.belongsTo( "twitchChannel" ),
-		quality     : DS.attr( "number" ),
-		gui_openchat: DS.attr( "boolean" ),
-		started     : DS.attr( "date" ),
+		stream      : belongsTo( "twitchStream" ),
+		channel     : belongsTo( "twitchChannel" ),
+		quality     : attr( "number" ),
+		gui_openchat: attr( "boolean" ),
+		started     : attr( "date" ),
 
 
 		/** @property {ChildProcess} spawn */
@@ -34,7 +37,7 @@ define([
 
 		auth: Ember.inject.service(),
 
-		session: Ember.computed.alias( "auth.session" ),
+		session: alias( "auth.session" ),
 
 		init: function() {
 			this._super.apply( this, arguments );
