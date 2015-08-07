@@ -3,6 +3,8 @@
 		"test/semver",
 		"test/linkmatching",
 		"test/helpers",
-		"test/parameters"
+		"test/parameters",
+		"test/ObjectBuffer",
+		"test/StreamOutputBuffer"
 	]
 }

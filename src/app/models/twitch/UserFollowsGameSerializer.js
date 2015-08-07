@@ -4,16 +4,17 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 		primaryKey: "name",
 
 		modelNameFromPayloadKey: function() {
-			return "twitchChannel";
-		},
-
-		attrs : {
-			teams: { deserialize: "records" }
+			return "twitchUserFollowsGame";
 		},
 
 		normalizePayload: function( payload ) {
+			if ( !payload || !payload.name ) { return {}; }
+
+			// return an empty payload (ignore all properties)
 			return {
-				twitchChannel: payload
+				twitchUserFollowsGame: [{
+					name: payload.name
+				}]
 			};
 		}
 	});

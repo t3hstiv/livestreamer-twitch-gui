@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.9.1",
+	"version": "0.9.3",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -29,12 +29,12 @@
 		"q": "1.2.0",
 		"q-io": "1.12.0",
 		"chrome-remote-interface": "0.7.0",
-		"node-webkit-builder": "bastimeyer/node-webkit-builder#runApp-appstart-event"
+		"nw-builder": "2.0.1"
 	},
 
 	"config": {
 		"display-name": "Livestreamer Twitch GUI",
-		"nw-js-version": "0.12.1",
+		"nw-js-version": "0.12.3",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
@@ -85,7 +85,7 @@
 			"pt":    { "flag": "pt", "lang": "portuguese" },
 			"pt-br": { "flag": "br", "lang": "brazilian" },
 			"ru":    { "flag": "ru", "lang": "russian" },
-			"sk":    { "flag": "sk", "lang": "slovak" },
+			"sk":    { "flag": "sk", "lang": "slovakian" },
 			"sv":    { "flag": "se", "lang": "swedish" },
 			"tr":    { "flag": "tr", "lang": "turkish" },
 			"zh":    { "flag": "cn", "lang": "chinese" },
