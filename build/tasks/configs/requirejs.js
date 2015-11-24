@@ -62,5 +62,43 @@ module.exports = {
 				"EmberData": "../vendor/ember-data/ember-data.prod"
 			}
 		}
+	},
+
+	test: {
+		options: {
+			baseUrl       : "src/app",
+			mainConfigFile: "src/app/config.js",
+
+			out: "build/test/test/test-main.js",
+			include: [ "test-main" ],
+			exclude: null,
+
+			shim: {
+				"QUnit": {
+					"exports": "QUnit"
+				},
+				"EmberTest": [ "Ember", "EmberData", "EmberHtmlbars" ]
+			},
+
+			map: {
+				"json": {
+					"json": "../requirejs/plugins/json/json.optimizer"
+				},
+				"es6": {
+					"es6": "../requirejs/plugins/es6/es6.optimizer"
+				}
+			},
+
+			paths: {
+				"test-main": "../test/test-main",
+				"tests": "../test/tests",
+
+				"QUnit": "../vendor/qunit/qunit/qunit",
+				"EmberTest": "../vendor/ember/ember-testing",
+
+				"json": "../requirejs/plugins/json/json.prod",
+				"es6" : "../requirejs/plugins/es6/es6.prod"
+			}
+		}
 	}
 };

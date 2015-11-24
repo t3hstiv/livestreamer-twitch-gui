@@ -24,6 +24,15 @@ module.exports = {
 		}
 	},
 
+	test: {
+		files: {
+			"build/test/vendor/requirejs/require.js": "src/vendor/requirejs/require.js",
+			"build/test/vendor/qunit/qunit/qunit.js": "src/vendor/qunit/qunit/qunit.js",
+			"build/test/vendor/qunit/qunit/qunit.css": "src/vendor/qunit/qunit/qunit.css",
+			"build/test/test/test.html": "src/test/test.html"
+		}
+	},
+
 	win32scripts: {
 		expand : true,
 		flatten: true,

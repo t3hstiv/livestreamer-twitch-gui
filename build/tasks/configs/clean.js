@@ -2,6 +2,7 @@ module.exports = {
 	options           : { force: true },
 	dist              : [ "dist/**", "!dist" ],
 	tmp               : [ "build/tmp/**", "!build/tmp" ],
+	test              : [ "build/test/**", "!build/test" ],
 	cache             : [ "build/cache/**", "!build/cache" ],
 	releases          : [ "build/releases/**", "!build/releases" ],
 	release_win32     : [ "build/releases/<%= package.name %>/win32/**" ],

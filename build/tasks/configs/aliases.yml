@@ -3,10 +3,6 @@ default:
 dev:
     - "build"
     - "concurrent:runbuild"
-test:
-    - "jshint:test"
-    - "connect:test"
-    - "qunit"
 build:
     - "jshint:tasks"
     - "jshint:app"
@@ -25,3 +21,13 @@ buildrelease:
     - "less:release"
     - "requirejs:release"
     - "uglify"
+test:
+    - "buildtest"
+    - "connect:test"
+    - "qunit"
+buildtest:
+    - "jshint:test"
+    - "clean:test"
+    - "copy:test"
+    - "metadata"
+    - "requirejs:test"
