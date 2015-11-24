@@ -26,10 +26,10 @@ module.exports = {
 
 	test: {
 		files: {
+			"build/test/package.json": "src/test/package.json",
+			"build/test/test/test.html": "src/test/test.html",
 			"build/test/vendor/requirejs/require.js": "src/vendor/requirejs/require.js",
-			"build/test/vendor/qunit/qunit/qunit.js": "src/vendor/qunit/qunit/qunit.js",
-			"build/test/vendor/qunit/qunit/qunit.css": "src/vendor/qunit/qunit/qunit.css",
-			"build/test/test/test.html": "src/test/test.html"
+			"build/test/vendor/qunit/qunit/qunit.css": "src/vendor/qunit/qunit/qunit.css"
 		}
 	},
 

@@ -23,8 +23,7 @@ buildrelease:
     - "uglify"
 test:
     - "buildtest"
-    - "connect:test"
-    - "qunit"
+    - "runtest"
 buildtest:
     - "jshint:test"
     - "clean:test"
