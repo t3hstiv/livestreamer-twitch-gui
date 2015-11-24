@@ -8,6 +8,12 @@ module.exports = {
 
 		include: [ "main" ],
 		exclude: [ "EmberHtmlbars", "EmberHtmlbarsWrapper" ],
+		excludeShallow: [
+			"requirejs/utils/fetch.optimizer",
+			"requirejs/utils/write",
+			"json!root/.babelrc",
+			"BabelWrapper"
+		],
 
 		findNestedDependencies: true,
 		generateSourceMaps    : false,
