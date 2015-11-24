@@ -19,7 +19,8 @@ requirejs.config({
 
 	"map": {
 		"*": {
-			"EmberHtmlbars": "EmberHtmlbarsWrapper"
+			"EmberHtmlbars": "EmberHtmlbarsWrapper",
+			"Babel": "BabelWrapper"
 		},
 		// export wrapper
 		"EmberHtmlbarsWrapper": {
@@ -32,6 +33,7 @@ requirejs.config({
 		"commonjs": "../requirejs/plugins/commonjs/commonjs",
 		"json"    : "../requirejs/plugins/json/json.dev",
 		"hbs"     : "../requirejs/plugins/hbs/hbs.dev",
+		"es6"     : "../requirejs/plugins/es6/es6.dev",
 
 		// Vendor
 		"Ember"        : "../vendor/ember/ember.debug",
@@ -44,6 +46,7 @@ requirejs.config({
 
 		// Wrappers
 		"EmberHtmlbarsWrapper": "../requirejs/wrappers/EmberHtmlbarsWrapper",
+		"BabelWrapper": "../requirejs/wrappers/BabelWrapper",
 
 		// Application paths
 		"root"        : "..",

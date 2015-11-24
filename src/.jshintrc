@@ -8,6 +8,7 @@
 
 	"browser"  : true,
 	"node"     : true,
+	"esnext"   : true,
 	"devel"    : false,
 
 	"curly"    : true,

@@ -26,6 +26,9 @@ module.exports = {
 			},
 			"hbs": {
 				"hbs": "../requirejs/plugins/hbs/hbs.optimizer"
+			},
+			"es6": {
+				"es6": "../requirejs/plugins/es6/es6.optimizer"
 			}
 		}
 	},
@@ -36,7 +39,8 @@ module.exports = {
 
 			paths: {
 				"json": "../requirejs/plugins/json/json.prod",
-				"hbs" : "../requirejs/plugins/hbs/hbs.prod"
+				"hbs" : "../requirejs/plugins/hbs/hbs.prod",
+				"es6" : "../requirejs/plugins/es6/es6.prod"
 			}
 		}
 	},
@@ -46,6 +50,7 @@ module.exports = {
 			paths: {
 				"json": "../requirejs/plugins/json/json.prod",
 				"hbs" : "../requirejs/plugins/hbs/hbs.prod",
+				"es6" : "../requirejs/plugins/es6/es6.prod",
 
 				"Ember"    : "../vendor/ember/ember.prod",
 				"EmberData": "../vendor/ember-data/ember-data.prod"
