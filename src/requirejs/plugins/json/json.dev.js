@@ -5,10 +5,11 @@ define([
 ) {
 
 	var parse = JSON.parse;
+	var reExt = /\.\w+$/;
 
 	return {
 		load: function( name, req, onload ) {
-			var url = req.toUrl( name + ".json" );
+			var url = req.toUrl( name + ( !reExt.test( name ) ? ".json" : "" ) );
 
 			fetch( url, function( response ) {
 				var parsed = parse( response );
