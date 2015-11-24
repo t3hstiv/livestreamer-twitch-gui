@@ -250,11 +250,8 @@ export default Service.extend( ChannelSettingsMixin, {
 		return Promise.all( streams.map(function( stream ) {
 			var id = get( stream, "channel.id" );
 			return this.loadChannelSettings( id )
-				.then(function( channelSettings ) {
-					return {
-						stream  : stream,
-						settings: channelSettings
-					};
+				.then(function( settings ) {
+					return { stream, settings };
 				});
 		}, this ) )
 			.then(function( streams ) {

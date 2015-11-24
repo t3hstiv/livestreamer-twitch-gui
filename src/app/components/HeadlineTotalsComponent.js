@@ -9,7 +9,7 @@ var { gte } = computed;
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "div",
 	classNames: [ "total" ],

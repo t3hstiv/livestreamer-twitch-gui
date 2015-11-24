@@ -95,10 +95,8 @@ function prepare( list, traverse ) {
 	traverse = traverse || function( elem ) { return elem; };
 
 	return list.map(function( value ) {
-		return {
-			token: tokenize( traverse( value ) ),
-			value: value
-		};
+		var token = tokenize( traverse( value ) );
+		return { token, value };
 	});
 }
 

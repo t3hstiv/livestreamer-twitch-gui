@@ -7,7 +7,7 @@ import layout from "hbs!templates/components/LangFilterComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "li",
 
 	init: function() {

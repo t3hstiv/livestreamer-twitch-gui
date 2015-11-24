@@ -27,10 +27,7 @@ export default Route.extend({
 						"stream.preview.large_nocache"
 					]) )
 					.then(function() {
-						return {
-							summary : summary,
-							featured: featured
-						};
+						return { summary, featured };
 					});
 			});
 	},

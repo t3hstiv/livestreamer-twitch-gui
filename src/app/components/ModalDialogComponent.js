@@ -9,7 +9,7 @@ var { or } = computed;
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "section",
 	classNameBindings: [ ":modal-dialog-component", "class" ],

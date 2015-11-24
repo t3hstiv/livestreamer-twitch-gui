@@ -8,7 +8,7 @@ import layout from "hbs!templates/components/DropDownComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "select",
 
 	classNameBindings: [ "class" ],

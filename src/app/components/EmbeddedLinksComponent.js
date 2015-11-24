@@ -7,7 +7,7 @@ import layout from "hbs!templates/components/EmbeddedLinksComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	content: function() {
 		var text   = get( this, "text" );

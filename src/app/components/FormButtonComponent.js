@@ -29,7 +29,7 @@ function iconAnimation( status, data ) {
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "",
 

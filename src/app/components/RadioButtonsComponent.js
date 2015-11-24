@@ -7,7 +7,7 @@ import layout from "hbs!templates/components/RadioButtonsComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "div",
 	className: "",
 	classNameBindings: [ "boxes:radiobtns", "className" ],

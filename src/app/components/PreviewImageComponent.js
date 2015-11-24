@@ -6,7 +6,7 @@ import layout from "hbs!templates/components/PreviewImageComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	classNames: [],
 	error: false,

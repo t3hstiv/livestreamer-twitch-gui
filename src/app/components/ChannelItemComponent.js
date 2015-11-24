@@ -3,6 +3,6 @@ import layout from "hbs!templates/components/ChannelItemComponent";
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
 	classNames: [ "channel-item-component" ]
 });

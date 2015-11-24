@@ -15,7 +15,7 @@ var { service } = inject;
 export default ListItemComponent.extend({
 	metadata: service(),
 
-	layout: layout,
+	layout,
 	classNames: [ "subscription-item-component" ],
 	attributeBindings: [ "style" ],
 

@@ -14,7 +14,7 @@ var $window = $( window );
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "button",
 	classNameBindings: [
 		":btn",

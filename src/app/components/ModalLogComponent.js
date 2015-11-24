@@ -9,7 +9,7 @@ var { scheduleOnce } = run;
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "section",
 	classNames: [ "modal-log" ],

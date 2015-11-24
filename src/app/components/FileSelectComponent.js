@@ -8,7 +8,7 @@ import layout from "hbs!templates/components/FileSelectComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "div",
 	classNames: [ "input-group" ],
 

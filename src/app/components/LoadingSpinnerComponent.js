@@ -3,7 +3,7 @@ import layout from "hbs!templates/components/LoadingSpinnerComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "svg",
 	attributeBindings: [ "viewBox" ],

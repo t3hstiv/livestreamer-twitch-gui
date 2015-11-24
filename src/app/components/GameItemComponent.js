@@ -10,7 +10,7 @@ var { or } = computed;
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
 	classNames: [ "game-item-component" ],
 
 	action: "goto",

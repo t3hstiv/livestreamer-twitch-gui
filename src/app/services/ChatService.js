@@ -192,16 +192,16 @@ export default Service.extend({
 		var javaArgs   = data[ "args" ];
 		var javaExec   = data[ "exec" ][ platform ];
 		var fbPaths    = data[ "fallback" ][ platform ];
-		var chattyArgs = data[ "chatty-args" ];
+		var args       = data[ "chatty-args" ];
 		var chattyFb   = data[ "chatty-fallback" ];
 
 		// object containing all the required data
 		var obj = {
-			args   : chattyArgs,
-			chatty : chatty,
-			user   : user,
-			token  : token,
-			channel: channel
+			args,
+			chatty,
+			user,
+			token,
+			channel
 		};
 		// just a single custom parameter, so a string can be defined in package.json
 		var parameters = [
@@ -259,11 +259,11 @@ export default Service.extend({
 		var user   = get( this, "auth.session.user_name" );
 		var params = Parameter.getParameters(
 			{
-				command: command,
-				channel: channel,
-				url    : url,
-				user   : user,
-				token  : token
+				command,
+				channel,
+				url,
+				user,
+				token
 			},
 			[
 				new ParameterCustom( null, "command", true )

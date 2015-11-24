@@ -13,7 +13,7 @@ var { cancel, later } = run;
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
 	classNameBindings: [
 		":stream-item-component",
 		"_showGame:show-game",

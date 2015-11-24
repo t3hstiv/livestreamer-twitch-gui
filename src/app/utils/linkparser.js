@@ -104,7 +104,7 @@ export function parseString( string ) {
 	});
 
 	return {
-		texts: texts,
-		links: links
+		texts,
+		links
 	};
 }

@@ -3,7 +3,7 @@ import layout from "hbs!templates/components/WrapContentComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 
 	didInitAttrs: function() {
 		var tagName = this.attrs.tag;

@@ -19,7 +19,7 @@ var { service } = inject;
 export default Component.extend({
 	store: service(),
 
-	layout: layout,
+	layout,
 	tagName: "nav",
 	classNames: [ "searchbar" ],
 
