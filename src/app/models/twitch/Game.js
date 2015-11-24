@@ -1,16 +1,16 @@
-define( [ "EmberData" ], function( DS ) {
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
 
-	return DS.Model.extend({
-		box: belongsTo( "twitchImage", { async: false } ),
-		giantbomb_id: attr( "number" ),
-		logo: belongsTo( "twitchImage", { async: false } ),
-		name: attr( "string" ),
-		popularity: attr( "number" )
-	}).reopenClass({
-		toString: function() { return "kraken/games"; }
-	});
-
+export default Model.extend({
+	box: belongsTo( "twitchImage", { async: false } ),
+	giantbomb_id: attr( "number" ),
+	logo: belongsTo( "twitchImage", { async: false } ),
+	name: attr( "string" ),
+	popularity: attr( "number" )
+}).reopenClass({
+	toString: function() { return "kraken/games"; }
 });

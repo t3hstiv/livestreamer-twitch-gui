@@ -1,71 +1,65 @@
-define([
-	"Ember",
-	"Selecter",
-	"hbs!templates/components/DropDownComponent"
-], function(
-	Ember,
-	Selecter,
-	layout
-) {
+import {
+	get,
+	set,
+	Component
+} from "Ember";
+import {} from "Selecter";
+import layout from "hbs!templates/components/DropDownComponent";
 
-	var get = Ember.get;
-	var set = Ember.set;
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "select",
+export default Component.extend({
+	layout: layout,
+	tagName: "select",
 
-		classNameBindings: [ "class" ],
-		attributeBindings: [ "disabled" ],
+	classNameBindings: [ "class" ],
+	attributeBindings: [ "disabled" ],
 
-		content : function() { return []; }.property(),
-		value   : null,
-		disabled: false,
+	content : function() { return []; }.property(),
+	value   : null,
+	disabled: false,
 
-		optionValuePath: "id",
-		optionLabelPath: "label",
+	optionValuePath: "id",
+	optionLabelPath: "label",
 
-		action: null,
+	action: null,
 
-		didInsertElement: function() {
-			this._super();
+	didInsertElement: function() {
+		this._super();
 
-			// TODO: remove Selecter dependency
+		// TODO: remove Selecter dependency
 
-			var classnames = [].slice.call( this.element.classList )
-				.without( "ember-view" )
-				.without( "ember-select" );
-			classnames.unshift( "custom" );
+		var classnames = [].slice.call( this.element.classList )
+			.without( "ember-view" )
+			.without( "ember-select" );
+		classnames.unshift( "custom" );
 
-			this.$().selecter({
-				customClass: classnames.join( " " ),
-				cover: true
-			});
-		},
+		this.$().selecter({
+			customClass: classnames.join( " " ),
+			cover: true
+		});
+	},
 
-		_valueChangedObserver: function() {
-			var content = get( this, "content" );
-			var path    = get( this, "optionValuePath" );
-			var value   = get( this, "value" );
+	_valueChangedObserver: function() {
+		var content = get( this, "content" );
+		var path    = get( this, "optionValuePath" );
+		var value   = get( this, "value" );
 
-			if ( !content.findBy( path, value ) ) {
-				return;
-			}
-
-			// update the element's value
-			this.element.value = value;
-			this.$().selecter( "refresh" );
-
-			this.sendAction( "action", value );
-		}.observes( "value" ),
-
-		change: function() {
-			var index   = this.element.selectedIndex;
-			var content = get( this, "content" );
-			var path    = get( this, "optionValuePath" );
-			var value   = get( content[ index ], path );
-			set( this, "value", value );
+		if ( !content.findBy( path, value ) ) {
+			return;
 		}
-	});
 
+		// update the element's value
+		this.element.value = value;
+		this.$().selecter( "refresh" );
+
+		this.sendAction( "action", value );
+	}.observes( "value" ),
+
+	change: function() {
+		var index   = this.element.selectedIndex;
+		var content = get( this, "content" );
+		var path    = get( this, "optionValuePath" );
+		var value   = get( content[ index ], path );
+		set( this, "value", value );
+	}
 });

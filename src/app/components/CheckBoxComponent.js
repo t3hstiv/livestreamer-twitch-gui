@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"hbs!templates/components/CheckBoxComponent"
-], function(
-	Ember,
-	layout
-) {
+import { Component } from "Ember";
+import layout from "hbs!templates/components/CheckBoxComponent";
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "label"
-	});
 
+export default Component.extend({
+	layout: layout,
+	tagName: "label"
 });

@@ -1,63 +1,63 @@
-define([
-	"Ember",
-	"gui/selectable",
-	"gui/smoothscroll"
-], function(
-	Ember,
-	guiSelectable,
-	guiSmoothscroll
-) {
+import {
+	get,
+	computed,
+	inject,
+	Component
+} from "Ember";
+import guiSelectable from "gui/selectable";
+import guiSmoothscroll from "gui/smoothscroll";
 
-	var get = Ember.get;
-	var alias = Ember.computed.alias;
-	var reTheme = /^theme-/;
 
-	return Ember.Component.extend({
-		metadata: Ember.inject.service(),
-		settings: Ember.inject.service(),
+var { alias } = computed;
+var { service } = inject;
 
-		tagName: "body",
-		classNames: [ "wrapper", "vertical" ],
+var reTheme = /^theme-/;
 
-		themes: alias( "metadata.config.themes" ),
-		theme: alias( "settings.content.gui_theme" ),
 
-		themeObserver: function() {
-			var themes = get( this, "themes" );
-			var theme  = get( this, "theme" );
+export default Component.extend({
+	metadata: service(),
+	settings: service(),
 
-			if ( themes.indexOf( theme ) === -1 ) {
-				theme = "default";
-			}
+	tagName: "body",
+	classNames: [ "wrapper", "vertical" ],
 
-			var list = document.documentElement.classList;
-			[].forEach.call( list, function( name ) {
-				if ( !reTheme.test( name ) ) { return; }
-				list.remove( name );
-			});
+	themes: alias( "metadata.config.themes" ),
+	theme: alias( "settings.content.gui_theme" ),
 
-			list.add( "theme-" + theme );
-		}.observes( "themes", "theme" ).on( "init" ),
+	themeObserver: function() {
+		var themes = get( this, "themes" );
+		var theme  = get( this, "theme" );
 
-		willInsertElement: function() {
-			document.documentElement.removeChild( document.body );
-		},
-
-		didInsertElement: function() {
-			guiSelectable();
-			guiSmoothscroll();
-
-			var controller = this.container.lookup( "controller:application" );
-
-			document.documentElement.addEventListener( "keyup", function( e ) {
-				var f5    = e.keyCode === 116;
-				var ctrlR = e.keyCode ===  82 && e.ctrlKey === true;
-				var metaR = e.keyCode ===  82 && e.metaKey === true;
-				if ( f5 || ctrlR || metaR ) {
-					controller.send( "refresh" );
-				}
-			}, false );
+		if ( themes.indexOf( theme ) === -1 ) {
+			theme = "default";
 		}
-	});
 
+		var list = document.documentElement.classList;
+		[].forEach.call( list, function( name ) {
+			if ( !reTheme.test( name ) ) { return; }
+			list.remove( name );
+		});
+
+		list.add( "theme-" + theme );
+	}.observes( "themes", "theme" ).on( "init" ),
+
+	willInsertElement: function() {
+		document.documentElement.removeChild( document.body );
+	},
+
+	didInsertElement: function() {
+		guiSelectable();
+		guiSmoothscroll();
+
+		var controller = this.container.lookup( "controller:application" );
+
+		document.documentElement.addEventListener( "keyup", function( e ) {
+			var f5    = e.keyCode === 116;
+			var ctrlR = e.keyCode ===  82 && e.ctrlKey === true;
+			var metaR = e.keyCode ===  82 && e.metaKey === true;
+			if ( f5 || ctrlR || metaR ) {
+				controller.send( "refresh" );
+			}
+		}, false );
+	}
 });

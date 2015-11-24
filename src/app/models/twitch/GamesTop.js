@@ -1,14 +1,14 @@
-define( [ "EmberData" ], function( DS ) {
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
 
-	return DS.Model.extend({
-		channels: attr( "number" ),
-		game: belongsTo( "twitchGame", { async: false } ),
-		viewers: attr( "number" )
-	}).reopenClass({
-		toString: function() { return "kraken/games/top"; }
-	});
-
+export default Model.extend({
+	channels: attr( "number" ),
+	game: belongsTo( "twitchGame", { async: false } ),
+	viewers: attr( "number" )
+}).reopenClass({
+	toString: function() { return "kraken/games/top"; }
 });

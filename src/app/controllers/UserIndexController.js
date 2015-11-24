@@ -1,55 +1,61 @@
-define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
+import {
+	get,
+	set,
+	computed,
+	inject,
+	Controller
+} from "Ember";
+import nwGui from "nwjs/nwGui";
 
-	var get = Ember.get;
-	var set = Ember.set;
-	var readOnly = Ember.computed.readOnly;
 
-	return Ember.Controller.extend({
-		auth        : Ember.inject.service(),
-		notification: Ember.inject.service(),
-		settings    : Ember.inject.service(),
+var { readOnly } = computed;
+var { service } = inject;
 
-		notif_enabled        : readOnly( "notification.enabled" ),
-		notif_notTempDisabled: readOnly( "notification.notTempDisabled" ),
-		notif_error          : readOnly( "notification.error" ),
 
-		scope: function() {
-			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
-		}.property( "auth.session.scope" ),
+export default Controller.extend({
+	auth        : service(),
+	notification: service(),
+	settings    : service(),
 
-		showTokenForm: false,
+	notif_enabled        : readOnly( "notification.enabled" ),
+	notif_notTempDisabled: readOnly( "notification.notTempDisabled" ),
+	notif_error          : readOnly( "notification.error" ),
 
-		actions: {
-			"signout": function() {
-				get( this, "auth" ).signout()
-					.then(function() {
-						this.transitionToRoute( "user.auth" );
-					}.bind( this ) );
-			},
+	scope: function() {
+		return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
+	}.property( "auth.session.scope" ),
 
-			"notifications_restart": function() {
-				get( this, "notification" ).start();
-			},
+	showTokenForm: false,
 
-			"copyToken": function( success, failure ) {
-				var token = get( this, "auth.session.access_token" );
-				var cb = nwGui.Clipboard.get();
+	actions: {
+		"signout": function() {
+			get( this, "auth" ).signout()
+				.then(function() {
+					this.transitionToRoute( "user.auth" );
+				}.bind( this ) );
+		},
 
-				if ( token && cb ) {
-					cb.set( token, "text" );
+		"notifications_restart": function() {
+			get( this, "notification" ).start();
+		},
 
-					if ( success instanceof Function ) {
-						success();
-					}
-				} else if ( failure instanceof Function ) {
-					failure().catch();
+		"copyToken": function( success, failure ) {
+			var token = get( this, "auth.session.access_token" );
+			var cb = nwGui.Clipboard.get();
+
+			if ( token && cb ) {
+				cb.set( token, "text" );
+
+				if ( success instanceof Function ) {
+					success();
 				}
-			},
-
-			"showTokenForm": function() {
-				set( this, "showTokenForm", true );
+			} else if ( failure instanceof Function ) {
+				failure().catch();
 			}
-		}
-	});
+		},
 
+		"showTokenForm": function() {
+			set( this, "showTokenForm", true );
+		}
+	}
 });

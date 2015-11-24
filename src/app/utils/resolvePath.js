@@ -1,24 +1,24 @@
-define( [ "commonjs!path" ], function( PATH ) {
+import PATH from "commonjs!path";
 
-	var reVarWindows = /%([^%]+)%/g;
-	var reVarUnix    = /\$([A-Z_]+)/g;
 
-	function fnVarReplace( _, v ) {
-		return process.env[ v ];
-	}
+var reVarWindows = /%([^%]+)%/g;
+var reVarUnix    = /\$([A-Z_]+)/g;
 
-	function resolvePathWindows( path ) {
-		path = path.replace( reVarWindows, fnVarReplace );
-		return PATH.resolve( path );
-	}
+function fnVarReplace( _, v ) {
+	return process.env[ v ];
+}
 
-	function resolvePathUnix( path ) {
-		path = path.replace( reVarUnix, fnVarReplace );
-		return PATH.resolve( path );
-	}
+function resolvePathWindows( path ) {
+	path = path.replace( reVarWindows, fnVarReplace );
+	return PATH.resolve( path );
+}
 
-	return process.platform === "win32"
-		? resolvePathWindows
-		: resolvePathUnix;
+function resolvePathUnix( path ) {
+	path = path.replace( reVarUnix, fnVarReplace );
+	return PATH.resolve( path );
+}
 
-});
+
+export default process.platform === "win32"
+	? resolvePathWindows
+	: resolvePathUnix;

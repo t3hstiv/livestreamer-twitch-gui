@@ -1,22 +1,16 @@
-define([
-	"Ember",
-	"components/FormButtonComponent",
-	"mixins/FollowButtonMixin"
-], function(
-	Ember,
-	FormButtonComponent,
-	FollowButtonMixin
-) {
+import { computed } from "Ember";
+import FormButtonComponent from "components/FormButtonComponent";
+import FollowButtonMixin from "mixins/FollowButtonMixin";
 
-	var alias = Ember.computed.alias;
 
-	return FormButtonComponent.extend( FollowButtonMixin, {
-		modelName: "twitchUserFollowsGame",
+var { alias } = computed;
 
-		// model alias (component attribute)
-		model    : alias( "game" ),
-		// model is a string, no game record (just use the game name as ID)
-		id       : alias( "model" )
-	});
 
+export default FormButtonComponent.extend( FollowButtonMixin, {
+	modelName: "twitchUserFollowsGame",
+
+	// model alias (component attribute)
+	model    : alias( "game" ),
+	// model is a string, no game record (just use the game name as ID)
+	id       : alias( "model" )
 });

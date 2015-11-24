@@ -1,29 +1,33 @@
-define( [ "Ember" ], function( Ember ) {
+import {
+	get,
+	inject,
+	Mixin
+} from "Ember";
 
-	var get = Ember.get;
 
-	return Ember.Mixin.create({
-		settings: Ember.inject.service(),
+var { service } = inject;
 
-		/**
-		 * @returns {(string[]|undefined)}
-		 */
-		broadcaster_language: function() {
-			if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
 
-			var filters = get( this, "settings.gui_langfilter" );
-			if ( !filters ) { return; }
+export default Mixin.create({
+	settings: service(),
 
-			var keys     = Object.keys( filters );
-			var filtered = keys.filter(function( lang ) {
-				return filters[ lang ];
-			}, filters );
+	/**
+	 * @returns {(string[]|undefined)}
+	 */
+	broadcaster_language: function() {
+		if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
 
-			// ignore everything (un)checked
-			if ( filtered.length > 0 && filtered.length !== keys.length ) {
-				return filtered;
-			}
-		}.property( "settings.gui_filterstreams", "settings.gui_langfilter" )
-	});
+		var filters = get( this, "settings.gui_langfilter" );
+		if ( !filters ) { return; }
 
+		var keys     = Object.keys( filters );
+		var filtered = keys.filter(function( lang ) {
+			return filters[ lang ];
+		}, filters );
+
+		// ignore everything (un)checked
+		if ( filtered.length > 0 && filtered.length !== keys.length ) {
+			return filtered;
+		}
+	}.property( "settings.gui_filterstreams", "settings.gui_langfilter" )
 });

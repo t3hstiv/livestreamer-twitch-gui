@@ -1,30 +1,34 @@
-define( [ "Ember" ], function( Ember ) {
+import {
+	get,
+	set,
+	computed,
+	inject,
+	Controller
+} from "Ember";
 
-	var get = Ember.get;
-	var set = Ember.set;
-	var alias = Ember.computed.alias;
-	var equal = Ember.computed.equal;
 
-	return Ember.Controller.extend({
-		application: Ember.inject.controller(),
+var { alias, equal } = computed;
+var { controller } = inject;
 
-		stream : alias( "model.stream" ),
-		channel: alias( "model.channel" ),
 
-		isSubrouteSettings: equal( "application.currentRouteName", "channel.settings" ),
-		isAnimated: false,
+export default Controller.extend({
+	application: controller(),
 
-		actions: {
-			"toggleSettings": function() {
-				set( this, "isAnimated", true );
-				this.transitionToRoute(
-					get( this, "isSubrouteSettings" )
-						? "channel.index"
-						: "channel.settings",
-					get( this, "model.channel.id" )
-				);
-			}
+	stream : alias( "model.stream" ),
+	channel: alias( "model.channel" ),
+
+	isSubrouteSettings: equal( "application.currentRouteName", "channel.settings" ),
+	isAnimated: false,
+
+	actions: {
+		"toggleSettings": function() {
+			set( this, "isAnimated", true );
+			this.transitionToRoute(
+				get( this, "isSubrouteSettings" )
+					? "channel.index"
+					: "channel.settings",
+				get( this, "model.channel.id" )
+			);
 		}
-	});
-
+	}
 });

@@ -1,25 +1,20 @@
-define([
-	"Ember",
-	"hbs!templates/components/PreviewImageComponent"
-], function(
-	Ember,
-	layout
-) {
+import {
+	set,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/PreviewImageComponent";
 
-	var set = Ember.set;
 
-	return Ember.Component.extend({
-		layout: layout,
+export default Component.extend({
+	layout: layout,
 
-		classNames: [],
-		error: false,
+	classNames: [],
+	error: false,
 
-		checkError: function() {
-			var self = this;
-			this.$( "img" ).one( "error", function() {
-				set( self, "error", true );
-			});
-		}.on( "willInsertElement" )
-	});
-
+	checkError: function() {
+		var self = this;
+		this.$( "img" ).one( "error", function() {
+			set( self, "error", true );
+		});
+	}.on( "willInsertElement" )
 });

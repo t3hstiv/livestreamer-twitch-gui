@@ -1,26 +1,22 @@
-define([
-	"Ember",
-	"hbs!templates/components/LangFilterComponent"
-], function(
-	Ember,
-	layout
-) {
+import {
+	get,
+	Binding,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/LangFilterComponent";
 
-	var get = Ember.get;
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "li",
+export default Component.extend({
+	layout: layout,
+	tagName: "li",
 
-		init: function() {
-			this._super.apply( this, arguments );
+	init: function() {
+		this._super.apply( this, arguments );
 
-			var prop = get( this, "prop" );
-			var binding = Ember.Binding
-				.from( "obj." + prop )
-				.to( "checked" );
-			binding.connect( this );
-		}
-	});
-
+		var prop = get( this, "prop" );
+		var binding = Binding
+			.from( "obj." + prop )
+			.to( "checked" );
+		binding.connect( this );
+	}
 });

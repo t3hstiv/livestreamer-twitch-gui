@@ -1,92 +1,90 @@
-define([
-	"Ember",
-	"hbs!templates/components/FormButtonComponent"
-], function(
-	Ember,
-	layout
-) {
+import {
+	get,
+	set,
+	makeArray,
+	$,
+	computed,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/FormButtonComponent";
 
-	var get = Ember.get;
-	var set = Ember.set;
-	var makeArray = Ember.makeArray;
-	var equal = Ember.computed.equal;
-	var $ = Ember.$;
 
-	var STATE_LOADING = -1;
-	var STATE_FAILURE =  0;
-	var STATE_SUCCESS =  1;
+var { equal } = computed;
 
-	function iconAnimation( status, data ) {
-		var defer = Promise.defer();
+var STATE_LOADING = -1;
+var STATE_FAILURE =  0;
+var STATE_SUCCESS =  1;
 
-		set( this, "_status", status );
-		this.$().one( "webkitAnimationEnd", function() {
-			set( this, "_status", null );
-			defer[ status ? "resolve" : "reject" ]( data );
-		}.bind( this ) );
+function iconAnimation( status, data ) {
+	var defer = Promise.defer();
 
-		return defer.promise;
-	}
+	set( this, "_status", status );
+	this.$().one( "webkitAnimationEnd", function() {
+		set( this, "_status", null );
+		defer[ status ? "resolve" : "reject" ]( data );
+	}.bind( this ) );
 
-	return Ember.Component.extend({
-		layout: layout,
+	return defer.promise;
+}
 
-		tagName: "",
 
-		// prevents an ember bug regarding tagless components and isVisible bindings
-		$: function() {
-			// use the layout's first element as component element
-			var element = this._renderNode.childNodes[0].firstNode;
-			return $( element );
-		},
+export default Component.extend({
+	layout: layout,
 
-		title  : null,
-		"class": null,
+	tagName: "",
 
-		action     : null,
-		actionParam: null,
+	// prevents an ember bug regarding tagless components and isVisible bindings
+	$: function() {
+		// use the layout's first element as component element
+		var element = this._renderNode.childNodes[0].firstNode;
+		return $( element );
+	},
 
-		icon    : false,
-		iconanim: false,
-		spinner : false,
+	title  : null,
+	"class": null,
 
-		_status: null,
+	action     : null,
+	actionParam: null,
 
-		isSuccess: equal( "_status", STATE_SUCCESS ),
-		isFailure: equal( "_status", STATE_FAILURE ),
-		isLoading: equal( "_status", STATE_LOADING ),
+	icon    : false,
+	iconanim: false,
+	spinner : false,
 
-		actions: {
-			click: function() {
-				var action  = get( this, "action" );
-				if ( !action ) { return; }
+	_status: null,
 
-				var context = makeArray( get( this, "actionParam" ) );
+	isSuccess: equal( "_status", STATE_SUCCESS ),
+	isFailure: equal( "_status", STATE_FAILURE ),
+	isLoading: equal( "_status", STATE_LOADING ),
 
-				if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
-					// success and failure callbacks
-					context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
-					context.push( iconAnimation.bind( this, STATE_FAILURE ) );
+	actions: {
+		click: function() {
+			var action  = get( this, "action" );
+			if ( !action ) { return; }
 
-					if ( get( this, "spinner" ) ) {
-						set( this, "_status", STATE_LOADING );
-					}
-				}
+			var context = makeArray( get( this, "actionParam" ) );
 
-				// allow the component to send actions to itself
-				// in case it has been extended and uses its own actions
-				if ( this.actions instanceof Object && this.actions.hasOwnProperty( action ) ) {
-					this.send.apply( this, [ action ].concat( context ) );
+			if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
+				// success and failure callbacks
+				context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
+				context.push( iconAnimation.bind( this, STATE_FAILURE ) );
 
-				} else {
-					this.triggerAction({
-						target: get( this, "targetObject" ),
-						action: action,
-						actionContext: context
-					});
+				if ( get( this, "spinner" ) ) {
+					set( this, "_status", STATE_LOADING );
 				}
 			}
-		}
-	});
 
+			// allow the component to send actions to itself
+			// in case it has been extended and uses its own actions
+			if ( this.actions instanceof Object && this.actions.hasOwnProperty( action ) ) {
+				this.send.apply( this, [ action ].concat( context ) );
+
+			} else {
+				this.triggerAction({
+					target: get( this, "targetObject" ),
+					action: action,
+					actionContext: context
+				});
+			}
+		}
+	}
 });

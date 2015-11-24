@@ -1,35 +1,30 @@
-define( [ "nwjs/nwGui" ], function( nwGui ) {
+import nwGui from "nwjs/nwGui";
 
-	var reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 
-	var enabled = {};
+var reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
+var enabled = {};
 
-	/**
-	 * @param {string} from
-	 * @param {string} to
-	 */
-	function enable( from, to ) {
-		var src = reURI.exec( from );
-		var dst = reURI.exec( to );
 
-		if ( !src || !dst ) {
-			throw new Error( "Invalid parameters" );
-		}
+/**
+ * @param {string} from
+ * @param {string} to
+ */
+export function enable( from, to ) {
+	var src = reURI.exec( from );
+	var dst = reURI.exec( to );
 
-		if ( enabled.hasOwnProperty( from ) ) {
-			if ( enabled[ from ].hasOwnProperty( to ) ) {
-				return;
-			}
-		} else {
-			enabled[ from ] = {};
-		}
-		enabled[ from ][ to ] = true;
-
-		nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
+	if ( !src || !dst ) {
+		throw new Error( "Invalid parameters" );
 	}
 
-	return {
-		enable: enable
-	};
+	if ( enabled.hasOwnProperty( from ) ) {
+		if ( enabled[ from ].hasOwnProperty( to ) ) {
+			return;
+		}
+	} else {
+		enabled[ from ] = {};
+	}
+	enabled[ from ][ to ] = true;
 
-});
+	nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
+}

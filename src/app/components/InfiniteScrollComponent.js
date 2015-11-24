@@ -1,81 +1,78 @@
-define([
-	"Ember",
-	"hbs!templates/components/InfiniteScrollComponent"
-], function(
-	Ember,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var alias = Ember.computed.alias;
-	var or = Ember.computed.or;
-
-	var $window = Ember.$( window );
+import {
+	get,
+	set,
+	computed,
+	$,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/InfiniteScrollComponent";
 
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "button",
-		classNameBindings: [
-			":btn",
-			":btn-with-icon",
-			":infinite-scroll-component",
-			"hasFetchedAll:hidden"
-		],
-		attributeBindings: [
-			"type",
-			"locked:disabled"
-		],
+var { alias, or } = computed;
 
-		scrollThreshold: 2 / 3,
-		scrollListener : null,
-
-		type: "button",
-		locked: or( "isFetching", "hasFetchedAll" ),
-		error: alias( "targetObject.fetchError" ),
-
-		isFetching: alias( "targetObject.isFetching" ),
-		hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
-
-		click: function() {
-			var targetObject = get( this, "targetObject" );
-			targetObject.send( "willFetchContent", true );
-		},
+var $window = $( window );
 
 
-		didInsertElement: function() {
-			this._super();
+export default Component.extend({
+	layout: layout,
+	tagName: "button",
+	classNameBindings: [
+		":btn",
+		":btn-with-icon",
+		":infinite-scroll-component",
+		"hasFetchedAll:hidden"
+	],
+	attributeBindings: [
+		"type",
+		"locked:disabled"
+	],
 
-			var $elem     = this.$().parent();
-			var threshold = get( this, "scrollThreshold" );
-			var target    = get( this, "targetObject" );
-			var listener  = this.infiniteScroll.bind( this, $elem[ 0 ], threshold, target );
+	scrollThreshold: 2 / 3,
+	scrollListener : null,
 
-			set( this, "scrollListener", listener );
+	type: "button",
+	locked: or( "isFetching", "hasFetchedAll" ),
+	error: alias( "targetObject.fetchError" ),
 
-			$elem.on( "scroll", listener );
-			$window.on( "resize", listener );
-		},
+	isFetching: alias( "targetObject.isFetching" ),
+	hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
 
-		willDestroyElement: function() {
-			this._super();
+	click: function() {
+		var targetObject = get( this, "targetObject" );
+		targetObject.send( "willFetchContent", true );
+	},
 
-			var scrollListener = get( this, "scrollListener" );
-			var $elem = this.$();
-			$elem.parent().off( "scroll", scrollListener );
-			$window.off( "resize", scrollListener );
 
-			set( this, "scrollListener", null );
-		},
+	didInsertElement: function() {
+		this._super();
 
-		infiniteScroll: function( elem, percentage, target ) {
-			var threshold = percentage * elem.clientHeight;
-			var remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
-			if ( remaining <= threshold ) {
-				target.send( "willFetchContent" );
-			}
+		var $elem     = this.$().parent();
+		var threshold = get( this, "scrollThreshold" );
+		var target    = get( this, "targetObject" );
+		var listener  = this.infiniteScroll.bind( this, $elem[ 0 ], threshold, target );
+
+		set( this, "scrollListener", listener );
+
+		$elem.on( "scroll", listener );
+		$window.on( "resize", listener );
+	},
+
+	willDestroyElement: function() {
+		this._super();
+
+		var scrollListener = get( this, "scrollListener" );
+		var $elem = this.$();
+		$elem.parent().off( "scroll", scrollListener );
+		$window.off( "resize", scrollListener );
+
+		set( this, "scrollListener", null );
+	},
+
+	infiniteScroll: function( elem, percentage, target ) {
+		var threshold = percentage * elem.clientHeight;
+		var remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
+		if ( remaining <= threshold ) {
+			target.send( "willFetchContent" );
 		}
-	});
-
+	}
 });

@@ -1,30 +1,29 @@
-define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "twitchSearchGame";
-		},
 
-		attrs: {
-			game: { deserialize: "records" }
-		},
+export default TwitchSerializer.extend({
+	modelNameFromPayloadKey: function() {
+		return "twitchSearchGame";
+	},
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			payload.games = ( payload.games || [] ).map(function( hash ) {
-				return {
-					game: hash
-				};
-			});
+	attrs: {
+		game: { deserialize: "records" }
+	},
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		},
+	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+		payload.games = ( payload.games || [] ).map(function( hash ) {
+			return {
+				game: hash
+			};
+		});
 
-		normalize: function( modelClass, resourceHash, prop ) {
-			var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
-			resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	},
 
-			return this._super( modelClass, resourceHash, prop );
-		}
-	});
+	normalize: function( modelClass, resourceHash, prop ) {
+		var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
 
+		return this._super( modelClass, resourceHash, prop );
+	}
 });

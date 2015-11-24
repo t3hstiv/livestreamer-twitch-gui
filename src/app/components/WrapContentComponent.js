@@ -1,20 +1,14 @@
-define([
-	"Ember",
-	"hbs!templates/components/WrapContentComponent"
-], function(
-	Ember,
-	layout
-) {
+import { Component } from "Ember";
+import layout from "hbs!templates/components/WrapContentComponent";
 
-	return Ember.Component.extend({
-		layout: layout,
 
-		didInitAttrs: function() {
-			var tagName = this.attrs.tag;
-			this.tagName = typeof tagName === "string"
-				? tagName
-				: "";
-		}
-	});
+export default Component.extend({
+	layout: layout,
 
+	didInitAttrs: function() {
+		var tagName = this.attrs.tag;
+		this.tagName = typeof tagName === "string"
+			? tagName
+			: "";
+	}
 });

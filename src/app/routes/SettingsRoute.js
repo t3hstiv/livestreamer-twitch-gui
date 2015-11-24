@@ -1,31 +1,36 @@
-define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+import {
+	get,
+	inject,
+	Route
+} from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
 
-	var get = Ember.get;
 
-	return Ember.Route.extend({
-		settings: Ember.inject.service(),
+var { service } = inject;
 
-		model: function() {
-			var settings = get( this, "settings.content" );
-			return ObjectBuffer.create({
-				content: settings.toJSON()
-			});
-		},
 
-		actions: {
-			willTransition: function( transition ) {
-				// if the user has changed any values
-				if ( get( this.controller, "model.isDirty" ) ) {
-					// stay here...
-					transition.abort();
+export default Route.extend({
+	settings: service(),
 
-					// and let the user decide
-					this.send( "openModal", "settings", this.controller, {
-						previousTransition: transition
-					});
-				}
+	model: function() {
+		var settings = get( this, "settings.content" );
+		return ObjectBuffer.create({
+			content: settings.toJSON()
+		});
+	},
+
+	actions: {
+		willTransition: function( transition ) {
+			// if the user has changed any values
+			if ( get( this.controller, "model.isDirty" ) ) {
+				// stay here...
+				transition.abort();
+
+				// and let the user decide
+				this.send( "openModal", "settings", this.controller, {
+					previousTransition: transition
+				});
 			}
 		}
-	});
-
+	}
 });

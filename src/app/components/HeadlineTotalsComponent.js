@@ -1,22 +1,20 @@
-define([
-	"Ember",
-	"hbs!templates/components/HeadlineTotalsComponent"
-], function(
-	Ember,
-	layout
-) {
+import {
+	computed,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/HeadlineTotalsComponent";
 
-	var gte = Ember.computed.gte;
 
-	return Ember.Component.extend({
-		layout: layout,
+var { gte } = computed;
 
-		tagName: "div",
-		classNames: [ "total" ],
 
-		total: null,
+export default Component.extend({
+	layout: layout,
 
-		isVisible: gte( "total", 0 )
-	});
+	tagName: "div",
+	classNames: [ "total" ],
 
+	total: null,
+
+	isVisible: gte( "total", 0 )
 });

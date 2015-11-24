@@ -1,16 +1,17 @@
-define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
+import {
+	get,
+	Route
+} from "Ember";
+import preload from "utils/preload";
 
-	var get = Ember.get;
 
-	return Ember.Route.extend({
-		model: function() {
-			var records = get( this.controllerFor( "livestreamer" ), "model" );
+export default Route.extend({
+	model: function() {
+		var records = get( this.controllerFor( "livestreamer" ), "model" );
 
-			return Promise.resolve( records.mapBy( "stream" ).toArray() )
-				.then( preload( "preview.large_nocache" ) )
-				// return the original record array
-				.then(function() { return records; });
-		}
-	});
-
+		return Promise.resolve( records.mapBy( "stream" ).toArray() )
+			.then( preload( "preview.large_nocache" ) )
+			// return the original record array
+			.then(function() { return records; });
+	}
 });

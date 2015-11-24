@@ -1,41 +1,38 @@
-define([
-	"Ember",
-	"nwjs/nwGui",
-	"components/FormButtonComponent"
-], function(
-	Ember,
-	nwGui,
-	FormButtonComponent
-) {
+import {
+	get,
+	inject
+} from "Ember";
+import nwGui from "nwjs/nwGui";
+import FormButtonComponent from "components/FormButtonComponent";
 
-	var get = Ember.get;
 
-	return FormButtonComponent.extend({
-		metadata: Ember.inject.service(),
+var { service } = inject;
 
-		"class" : "btn-info",
-		icon    : "fa-share-alt",
-		title   : "Copy channel url to clipboard",
-		iconanim: true,
 
-		action: "share",
+export default FormButtonComponent.extend({
+	metadata: service(),
 
-		actions: {
-			"share": function( success, failure ) {
-				var url = get( this, "channel.url" );
-				var cb  = nwGui.Clipboard.get();
+	"class" : "btn-info",
+	icon    : "fa-share-alt",
+	title   : "Copy channel url to clipboard",
+	iconanim: true,
 
-				if ( url && cb ) {
-					cb.set( url, "text" );
+	action: "share",
 
-					if ( success instanceof Function ) {
-						success();
-					}
-				} else if ( failure instanceof Function ) {
-					failure().catch();
+	actions: {
+		"share": function( success, failure ) {
+			var url = get( this, "channel.url" );
+			var cb  = nwGui.Clipboard.get();
+
+			if ( url && cb ) {
+				cb.set( url, "text" );
+
+				if ( success instanceof Function ) {
+					success();
 				}
+			} else if ( failure instanceof Function ) {
+				failure().catch();
 			}
 		}
-	});
-
+	}
 });

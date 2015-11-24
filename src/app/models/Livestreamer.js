@@ -1,181 +1,179 @@
-define([
-	"Ember",
-	"EmberData",
-	"utils/Parameter",
-	"utils/ParameterCustom",
-	"utils/Substitution"
-], function(
-	Ember,
-	DS,
-	Parameter,
-	ParameterCustom,
-	Substitution
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
-	var alias = Ember.computed.alias;
-
-	/**
-	 * @class Livestreamer
-	 */
-	return DS.Model.extend({
-		stream      : belongsTo( "twitchStream", { async: false } ),
-		channel     : belongsTo( "twitchChannel", { async: false } ),
-		quality     : attr( "number" ),
-		gui_openchat: attr( "boolean" ),
-		started     : attr( "date" ),
+import {
+	get,
+	set,
+	computed,
+	inject
+} from "Ember";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
+import Parameter from "utils/Parameter";
+import ParameterCustom from "utils/ParameterCustom";
+import Substitution from "utils/Substitution";
 
 
-		/** @property {ChildProcess} spawn */
-		spawn  : null,
-		success: false,
-		error  : false,
-		warning: false,
-		log    : null,
-		showLog: false,
+var { alias } = computed;
+var { service } = inject;
 
 
-		auth    : Ember.inject.service(),
-		settings: Ember.inject.service(),
+/**
+ * @class Livestreamer
+ */
+export default Model.extend({
+	stream      : belongsTo( "twitchStream", { async: false } ),
+	channel     : belongsTo( "twitchChannel", { async: false } ),
+	quality     : attr( "number" ),
+	gui_openchat: attr( "boolean" ),
+	started     : attr( "date" ),
 
-		session: alias( "auth.session" ),
+
+	/** @property {ChildProcess} spawn */
+	spawn  : null,
+	success: false,
+	error  : false,
+	warning: false,
+	log    : null,
+	showLog: false,
 
 
-		kill: function() {
-			var spawn = get( this, "spawn" );
-			if ( spawn ) {
-				spawn.kill( "SIGTERM" );
-			}
-		},
+	auth    : service(),
+	settings: service(),
 
-		clearLog: function() {
-			return set( this, "log", [] );
-		},
+	session: alias( "auth.session" ),
 
-		pushLog: function( type, line ) {
-			get( this, "log" ).pushObject({
-				type: type,
-				line: line
-			});
-		},
 
-		qualityObserver: function() {
-			// The LivestreamerController knows that it has to spawn a new child process
-			this.kill();
-		}.observes( "quality" ),
+	kill: function() {
+		var spawn = get( this, "spawn" );
+		if ( spawn ) {
+			spawn.kill( "SIGTERM" );
+		}
+	},
 
-		parameters: function() {
-			var isAdvanced = get( this, "settings.advanced" );
+	clearLog: function() {
+		return set( this, "log", [] );
+	},
 
-			return Parameter.getParameters(
-				this,
-				this.constructor.parameters,
-				isAdvanced && this.constructor.substitutions
-			);
-		}.property().volatile()
+	pushLog: function( type, line ) {
+		get( this, "log" ).pushObject({
+			type: type,
+			line: line
+		});
+	},
 
-	}).reopenClass({
+	qualityObserver: function() {
+		// The LivestreamerController knows that it has to spawn a new child process
+		this.kill();
+	}.observes( "quality" ),
 
-		toString: function() { return "Livestreamer"; },
+	parameters: function() {
+		var isAdvanced = get( this, "settings.advanced" );
 
-		/** @property {Parameter[]} parameters */
-		parameters: [
-			new ParameterCustom(
-				"settings.advanced",
-				"settings.livestreamer_params"
-			),
-			new Parameter(
-				"--no-version-check"
-			),
-			new Parameter(
-				"--player",
-				null,
-				"settings.player",
-				true
-			),
-			new Parameter(
-				"--player-args",
-				[ "settings.advanced", "settings.player" ],
-				"settings.player_params",
-				true
-			),
-			new Parameter(
-				"--player-passthrough",
-				"settings.advanced",
-				"settings.player_passthrough"
-			),
-			new Parameter(
-				"--player-continuous-http",
-				[
-					"settings.player_reconnect",
-					function() {
-						return get( this, "settings.player_passthrough" ) === "http";
-					}
-				]
-			),
-			new Parameter(
-				"--player-no-close",
-				"settings.player_no_close"
-			),
-			new Parameter(
-				"--twitch-oauth-token",
-				"session.isLoggedIn",
-				"session.access_token"
-			),
-			new Parameter(
-				"--hls-live-edge",
-				"settings.advanced",
-				"settings.hls_live_edge"
-			),
-			new Parameter(
-				"--hls-segment-threads",
-				"settings.advanced",
-				"settings.hls_segment_threads"
-			)
-		],
+		return Parameter.getParameters(
+			this,
+			this.constructor.parameters,
+			isAdvanced && this.constructor.substitutions
+		);
+	}.property().volatile()
 
-		/** @property {Substitution[]} substitutions */
-		substitutions: [
-			new Substitution(
-				[ "name", "channel", "channelname" ],
-				"channel.display_name",
-				"Channel name"
-			),
-			new Substitution(
-				[ "status", "title" ],
-				"channel.status",
-				"Channel status text"
-			),
-			new Substitution(
-				[ "game", "gamename" ],
-				"stream.game",
-				"Name of the game being played"
-			),
-			new Substitution(
-				"delay",
-				"channel.delay",
-				"Additional stream delay in seconds"
-			),
-			new Substitution(
-				[ "online", "since", "created" ],
-				"stream.created_at",
-				"Online since"
-			),
-			new Substitution(
-				[ "viewers", "current" ],
-				"stream.viewers",
-				"Number of current viewers"
-			),
-			new Substitution(
-				[ "views", "overall" ],
-				"channel.views",
-				"Total number of views"
-			)
-		]
+}).reopenClass({
 
-	});
+	toString: function() { return "Livestreamer"; },
+
+	/** @property {Parameter[]} parameters */
+	parameters: [
+		new ParameterCustom(
+			"settings.advanced",
+			"settings.livestreamer_params"
+		),
+		new Parameter(
+			"--no-version-check"
+		),
+		new Parameter(
+			"--player",
+			null,
+			"settings.player",
+			true
+		),
+		new Parameter(
+			"--player-args",
+			[ "settings.advanced", "settings.player" ],
+			"settings.player_params",
+			true
+		),
+		new Parameter(
+			"--player-passthrough",
+			"settings.advanced",
+			"settings.player_passthrough"
+		),
+		new Parameter(
+			"--player-continuous-http",
+			[
+				"settings.player_reconnect",
+				function() {
+					return get( this, "settings.player_passthrough" ) === "http";
+				}
+			]
+		),
+		new Parameter(
+			"--player-no-close",
+			"settings.player_no_close"
+		),
+		new Parameter(
+			"--twitch-oauth-token",
+			"session.isLoggedIn",
+			"session.access_token"
+		),
+		new Parameter(
+			"--hls-live-edge",
+			"settings.advanced",
+			"settings.hls_live_edge"
+		),
+		new Parameter(
+			"--hls-segment-threads",
+			"settings.advanced",
+			"settings.hls_segment_threads"
+		)
+	],
+
+	/** @property {Substitution[]} substitutions */
+	substitutions: [
+		new Substitution(
+			[ "name", "channel", "channelname" ],
+			"channel.display_name",
+			"Channel name"
+		),
+		new Substitution(
+			[ "status", "title" ],
+			"channel.status",
+			"Channel status text"
+		),
+		new Substitution(
+			[ "game", "gamename" ],
+			"stream.game",
+			"Name of the game being played"
+		),
+		new Substitution(
+			"delay",
+			"channel.delay",
+			"Additional stream delay in seconds"
+		),
+		new Substitution(
+			[ "online", "since", "created" ],
+			"stream.created_at",
+			"Online since"
+		),
+		new Substitution(
+			[ "viewers", "current" ],
+			"stream.viewers",
+			"Number of current viewers"
+		),
+		new Substitution(
+			[ "views", "overall" ],
+			"channel.views",
+			"Total number of views"
+		)
+	]
 
 });

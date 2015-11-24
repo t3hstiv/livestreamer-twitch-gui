@@ -1,19 +1,23 @@
-define( [ "Ember" ], function( Ember ) {
+import {
+	get,
+	inject,
+	Controller
+} from "Ember";
 
-	var get = Ember.get;
 
-	return Ember.Controller.extend({
-		metadata: Ember.inject.service(),
+var { service } = inject;
 
-		dependencies: function() {
-			var deps = get( this, "metadata.dependencies" );
-			return Object.keys( deps ).map(function( key ) {
-				return {
-					title  : key,
-					version: deps[ key ]
-				};
-			});
-		}.property( "metadata.dependencies" )
-	});
 
+export default Controller.extend({
+	metadata: service(),
+
+	dependencies: function() {
+		var deps = get( this, "metadata.dependencies" );
+		return Object.keys( deps ).map(function( key ) {
+			return {
+				title  : key,
+				version: deps[ key ]
+			};
+		});
+	}.property( "metadata.dependencies" )
 });

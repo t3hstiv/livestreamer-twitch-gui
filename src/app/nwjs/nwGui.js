@@ -1,5 +1,1 @@
-define( [], function() {
-
-	return window.nwDispatcher.requireNwGui();
-
-});
+export default window.nwDispatcher.requireNwGui();

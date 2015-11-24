@@ -1,86 +1,87 @@
-define( [ "Ember" ], function( Ember ) {
-
-	var get = Ember.get;
-
-	var reSubstitution = /\{([a-z]+)}/ig;
-
-	var reEscape       = /(["'`$\\])/g;
-	var strEscape      = "\\$1";
-
-	var reDouble       = /([\{}])/g;
-	var strDouble      = "$1$1";
-
-	var reWhitespace   = /\s+/g;
+import {
+	get,
+	makeArray
+} from "Ember";
 
 
-	/**
-	 * @class Substitution
-	 * @param {(string|string[])} vars
-	 * @param {string} path
-	 * @param {string?} description
-	 * @constructor
-	 */
-	function Substitution( vars, path, description ) {
-		this.vars = Ember.makeArray( vars );
-		this.path = path;
-		this.description = description;
+var reSubstitution = /\{([a-z]+)}/ig;
+
+var reEscape       = /(["'`$\\])/g;
+var strEscape      = "\\$1";
+
+var reDouble       = /([\{}])/g;
+var strDouble      = "$1$1";
+
+var reWhitespace   = /\s+/g;
+
+
+/**
+ * @class Substitution
+ * @param {(string|string[])} vars
+ * @param {string} path
+ * @param {string?} description
+ * @constructor
+ */
+function Substitution( vars, path, description ) {
+	this.vars = makeArray( vars );
+	this.path = path;
+	this.description = description;
+}
+
+/**
+ * @param {string} name
+ * @returns {boolean}
+ */
+Substitution.prototype.hasVar = function( name ) {
+	return this.vars.indexOf( name ) !== -1;
+};
+
+/**
+ * @param {Object} obj
+ * @returns {(string|boolean)}
+ */
+Substitution.prototype.getValue = function( obj ) {
+	var val = get( obj, this.path );
+	if ( val === undefined ) {
+		return false;
 	}
 
-	/**
-	 * @param {string} name
-	 * @returns {boolean}
-	 */
-	Substitution.prototype.hasVar = function( name ) {
-		return this.vars.indexOf( name ) !== -1;
-	};
+	return String( val )
+		// escape special characters
+		.replace( reEscape, strEscape )
+		// escape curly brackets
+		.replace( reDouble, strDouble )
+		// remove whitespace
+		.replace( reWhitespace, " " )
+		.trim();
+};
 
-	/**
-	 * @param {Object} obj
-	 * @returns {(string|boolean)}
-	 */
-	Substitution.prototype.getValue = function( obj ) {
-		var val = get( obj, this.path );
-		if ( val === undefined ) {
-			return false;
-		}
+/**
+ * Apply multiple substituions at once.
+ * @param {string} str
+ * @param {(Substitution|Substitution[])} substitutions
+ * @param {Object} obj
+ */
+Substitution.substitute = function( str, substitutions, obj ) {
+	substitutions = makeArray( substitutions );
 
-		return String( val )
-			// escape special characters
-			.replace( reEscape, strEscape )
-			// escape curly brackets
-			.replace( reDouble, strDouble )
-			// remove whitespace
-			.replace( reWhitespace, " " )
-			.trim();
-	};
+	return str.replace( reSubstitution, function( all, name ) {
+		name = name.toLowerCase();
 
-	/**
-	 * Apply multiple substituions at once.
-	 * @param {string} str
-	 * @param {(Substitution|Substitution[])} substitutions
-	 * @param {Object} obj
-	 */
-	Substitution.substitute = function( str, substitutions, obj ) {
-		substitutions = Ember.makeArray( substitutions );
-
-		return str.replace( reSubstitution, function( all, name ) {
-			name = name.toLowerCase();
-
-			var res = false;
-			// find the first matching variable and get its value
-			substitutions.some(function( substitution ) {
-				if ( substitution.hasVar( name ) ) {
-					res = substitution.getValue( obj );
-					return true;
-				}
-			});
-
-			return res === false
-				? all
-				: res;
+		var res = false;
+		// find the first matching variable and get its value
+		substitutions.some(function( substitution ) {
+			if ( substitution.hasVar( name ) ) {
+				res = substitution.getValue( obj );
+				return true;
+			}
 		});
-	};
 
-	return Substitution;
+		return res === false
+			? all
+			: res;
+	});
+};
 
-});
+
+export default Substitution;

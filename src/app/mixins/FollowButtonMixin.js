@@ -1,67 +1,62 @@
-define([
-	"Ember",
-	"mixins/TwitchInteractButtonMixin"
-], function(
-	Ember,
-	TwitchInteractButtonMixin
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-
-	return Ember.Mixin.create( TwitchInteractButtonMixin, {
-		action: "follow",
-
-		iconLoading : "fa-question",
-		iconSuccess : "fa-heart",
-		iconFailure : "fa-heart-o",
-		titleLoading: "",
-		titleSuccess: function() {
-			var name = get( this, "name" );
-			return "Unfollow " + name;
-		}.property( "name" ),
-		titleFailure: function() {
-			var name = get( this, "name" );
-			return "Follow " + name;
-		}.property( "name" ),
+import {
+	get,
+	set,
+	Mixin
+} from "Ember";
+import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 
 
-		actions: {
-			"follow": function( success, failure ) {
-				if ( !this.modelName ) { return; }
-				if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
-				set( this, "isLocked", true );
+export default Mixin.create( TwitchInteractButtonMixin, {
+	action: "follow",
 
-				var self   = this;
-				var store  = get( this, "store" );
-				var model  = get( this, "id" );
-				var record = get( this, "record" );
+	iconLoading : "fa-question",
+	iconSuccess : "fa-heart",
+	iconFailure : "fa-heart-o",
+	titleLoading: "",
+	titleSuccess: function() {
+		var name = get( this, "name" );
+		return "Unfollow " + name;
+	}.property( "name" ),
+	titleFailure: function() {
+		var name = get( this, "name" );
+		return "Follow " + name;
+	}.property( "name" ),
 
-				function unlock() { set( self, "isLocked", false ); }
 
-				if ( !record ) {
-					// create a new record and save it
-					record = store.createRecord( this.modelName, { id: model } );
-					record.save()
-						.then(function( record ) {
-							set( self, "record", record );
-						})
-						.then( success, failure )
-						.then( unlock, unlock );
+	actions: {
+		"follow": function( success, failure ) {
+			if ( !this.modelName ) { return; }
+			if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
+			set( this, "isLocked", true );
 
-				} else {
-					// delete the record and save it
-					record.destroyRecord()
-						.then(function() {
-							set( self, "record", false );
-							// also unload it
-							store.unloadRecord( record );
-						})
-						.then( success, failure )
-						.then( unlock, unlock );
-				}
+			var self   = this;
+			var store  = get( this, "store" );
+			var model  = get( this, "id" );
+			var record = get( this, "record" );
+
+			function unlock() { set( self, "isLocked", false ); }
+
+			if ( !record ) {
+				// create a new record and save it
+				record = store.createRecord( this.modelName, { id: model } );
+				record.save()
+					.then(function( record ) {
+						set( self, "record", record );
+					})
+					.then( success, failure )
+					.then( unlock, unlock );
+
+			} else {
+				// delete the record and save it
+				record.destroyRecord()
+					.then(function() {
+						set( self, "record", false );
+						// also unload it
+						store.unloadRecord( record );
+					})
+					.then( success, failure )
+					.then( unlock, unlock );
 			}
 		}
-	});
-
+	}
 });

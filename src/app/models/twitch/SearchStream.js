@@ -1,11 +1,11 @@
-define( [ "EmberData" ], function( DS ) {
+import {
+	belongsTo,
+	Model
+} from "EmberData";
 
-	var belongsTo = DS.belongsTo;
 
-	return DS.Model.extend({
-		stream: belongsTo( "twitchStream", { async: false } )
-	}).reopenClass({
-		toString: function() { return "kraken/search/streams"; }
-	});
-
+export default Model.extend({
+	stream: belongsTo( "twitchStream", { async: false } )
+}).reopenClass({
+	toString: function() { return "kraken/search/streams"; }
 });

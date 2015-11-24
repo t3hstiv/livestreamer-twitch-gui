@@ -1,11 +1,11 @@
-define( [ "Ember" ], function( Ember ) {
+import { Helper } from "Ember";
 
-	function boolNot( value ) {
-		return !value;
-	}
 
-	return Ember.Helper.helper(function( params ) {
-		return params.every( boolNot );
-	});
+function boolNot( value ) {
+	return !value;
+}
 
+
+export default Helper.helper(function( params ) {
+	return params.every( boolNot );
 });

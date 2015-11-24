@@ -1,11 +1,11 @@
-define( [ "Ember" ], function( Ember ) {
+import { Helper } from "Ember";
 
-	function boolAnd( value ) {
-		return value;
-	}
 
-	return Ember.Helper.helper(function( params ) {
-		return params.every( boolAnd );
-	});
+function boolAnd( value ) {
+	return value;
+}
 
+
+export default Helper.helper(function( params ) {
+	return params.every( boolAnd );
 });

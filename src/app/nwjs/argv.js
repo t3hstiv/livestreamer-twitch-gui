@@ -1,19 +1,12 @@
-define([
-	"nwjs/nwGui",
-	"utils/contains"
-], function(
-	nwGui,
-	contains
-) {
+import nwGui from "nwjs/nwGui";
+import { some } from "utils/contains";
 
-	var argv = nwGui.App.fullArgv;
 
-	return {
-		"tray": contains.some.call( argv, "--tray", "--hide", "--hidden" ),
-		"max" : contains.some.call( argv, "--max", "--maximize", "--maximized" ),
-		"min" : contains.some.call( argv, "--min", "--minimize", "--minimized" ),
-		"resetwindow": contains.some.call( argv, "--reset-window" ),
-		"versioncheck": !contains.some.call( argv, "--no-version-check" )
-	};
+var { fullArgv } = nwGui.App;
 
-});
+
+export var tray = some.call( fullArgv, "--tray", "--hide", "--hidden" );
+export var max  = some.call( fullArgv, "--max", "--maximize", "--maximized" );
+export var min  = some.call( fullArgv, "--min", "--minimize", "--minimized" );
+export var resetwindow = some.call( fullArgv, "--reset-window" );
+export var versioncheck = !some.call( fullArgv, "--no-version-check" );

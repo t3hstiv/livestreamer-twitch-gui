@@ -1,11 +1,11 @@
-define( [ "Ember" ], function( Ember ) {
+import { Helper } from "Ember";
 
-	function isNull( currentValue ) {
-		return currentValue === null;
-	}
 
-	return Ember.Helper.helper(function( params ) {
-		return params.every( isNull );
-	});
+function isNull( currentValue ) {
+	return currentValue === null;
+}
 
+
+export default Helper.helper(function( params ) {
+	return params.every( isNull );
 });

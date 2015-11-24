@@ -1,12 +1,17 @@
-define( [ "Ember" ], function( Ember ) {
+import {
+	computed,
+	inject,
+	Controller
+} from "Ember";
 
-	var sort = Ember.computed.sort;
 
-	return Ember.Controller.extend({
-		auth: Ember.inject.service(),
+var { sort } = computed;
+var { service } = inject;
 
-		sortedModel: sort( "model", "sortBy" ),
-		sortBy: [ "started:desc" ]
-	});
 
+export default Controller.extend({
+	auth: service(),
+
+	sortedModel: sort( "model", "sortBy" ),
+	sortBy: [ "started:desc" ]
 });

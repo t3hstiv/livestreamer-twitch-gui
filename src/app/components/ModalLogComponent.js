@@ -1,32 +1,30 @@
-define([
-	"Ember",
-	"hbs!templates/components/ModalLogComponent"
-], function(
-	Ember,
-	layout
-) {
+import {
+	run,
+	Component
+} from "Ember";
+import layout from "hbs!templates/components/ModalLogComponent";
 
-	var scheduleOnce = Ember.run.scheduleOnce;
 
-	return Ember.Component.extend({
-		layout: layout,
+var { scheduleOnce } = run;
 
-		tagName: "section",
-		classNames: [ "modal-log" ],
 
-		log: function() {
-			return [];
-		}.property(),
+export default Component.extend({
+	layout: layout,
 
-		_logObserver: function() {
-			scheduleOnce( "afterRender", this, "scrollToBottom" );
-		}.observes( "log.[]" ),
+	tagName: "section",
+	classNames: [ "modal-log" ],
 
-		scrollToBottom: function() {
-			var elem = this.element;
-			if ( !elem ) { return; }
-			elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
-		}.on( "didInsertElement" )
-	});
+	log: function() {
+		return [];
+	}.property(),
 
+	_logObserver: function() {
+		scheduleOnce( "afterRender", this, "scrollToBottom" );
+	}.observes( "log.[]" ),
+
+	scrollToBottom: function() {
+		var elem = this.element;
+		if ( !elem ) { return; }
+		elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
+	}.on( "didInsertElement" )
 });

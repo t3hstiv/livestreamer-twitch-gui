@@ -1,5 +1,4 @@
-define( [ "nwjs/nwGui" ], function( nwGui ) {
+import nwGui from "nwjs/nwGui";
 
-	return nwGui.Screen.Init();
 
-});
+export default nwGui.Screen.Init();
