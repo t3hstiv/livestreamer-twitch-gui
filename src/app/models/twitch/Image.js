@@ -18,7 +18,7 @@ function nocache( attr ) {
 		var timestamp = +new Date() / 1000;
 		timestamp -= timestamp % time;
 
-		return url + "?_=" + timestamp;
+		return `${ url }?_=${ timestamp }`;
 	}).volatile();
 }
 

@@ -28,7 +28,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 		if ( token === null ) {
 			delete this.headers[ token ];
 		} else {
-			this.headers[ "Authorization" ] = "OAuth " + token;
+			this.headers[ "Authorization" ] = `OAuth ${ token }`;
 		}
 	}.observes( "access_token" ),
 
@@ -72,7 +72,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 						return user;
 					// unknown fragment
 					default:
-						throw new Error( "Unknown URL fragment: " + key );
+						throw new Error( `Unknown URL fragment: ${ key }` );
 				}
 			});
 		});

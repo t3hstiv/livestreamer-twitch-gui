@@ -4,7 +4,7 @@ var gTLD   = [
 	"com", "org", "net", "int", "biz", "pro", "edu", "gov", "mil",
 	"info", "name", "mobi", "jobs", "pics", "link", "wiki", "asia"
 ];
-var reTLD  = "(?:[a-z]{2}|" + gTLD.join( "|" ) + ")";
+var reTLD  = `(?:[a-z]{2}|${ gTLD.join( "|" ) })`;
 var reHost = "(?:[a-z0-9\u00C0-\uFFFF-]+\\.)";
 
 
@@ -14,7 +14,7 @@ var reURL = new RegExp([
 	// scheme
 	"(https?:\\/\\/)?",
 	// sub.host.tld:port
-	"(" + reHost + "+" + reTLD + "(?::\\d{2,5})?)",
+	`(${ reHost }+${ reTLD }(?::\\d{2,5})?)`,
 	// path
 	"(\\/\\S*)?",
 	// boundary
@@ -42,8 +42,8 @@ var reTwitter = new RegExp([
 
 function fnTwitter( _, __, user ) {
 	return {
-		url : "https://twitter.com/" + user,
-		text: "@" + user
+		url : `https://twitter.com/${ user }`,
+		text: `@${ user }`
 	};
 }
 

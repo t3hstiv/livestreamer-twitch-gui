@@ -13,7 +13,8 @@ export default FormButtonComponent.extend({
 	settings: service(),
 
 	"class": function() {
-		return "btn-neutral" + ( get( this, "isHomepage" ) ? " active" : "" );
+		var isHomepage = get( this, "isHomepage" );
+		return `btn-neutral ${ isHomepage ? "active" : "" }`;
 	}.property( "isHomepage" ),
 
 	title: "Set as homepage",

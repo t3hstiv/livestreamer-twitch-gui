@@ -36,13 +36,13 @@ export default Model.extend({
 	title_followers: function() {
 		var followers = get( this, "followers" );
 		var numerus   = followers === 1 ? " person is following" : " people are following";
-		return followers + numerus;
+		return `${ followers }${ numerus }`;
 	}.property( "followers" ),
 
 	title_views: function() {
 		var views   = get( this, "views" );
 		var numerus = views === 1 ? " channel view" : " channel views";
-		return views + numerus;
+		return `${ views }${ numerus }`;
 	}.property( "views" ),
 
 

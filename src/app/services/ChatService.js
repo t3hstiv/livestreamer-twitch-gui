@@ -245,7 +245,7 @@ export default Service.extend({
 					});
 			})
 			.then(function( exec ) {
-				obj.args = javaArgs + " " + obj.args;
+				obj.args = `${ javaArgs } ${ obj.args }`;
 				substitutions.push( new Substitution( "chatty", "chatty" ) );
 
 				var params = Parameter.getParameters( obj, parameters, substitutions );

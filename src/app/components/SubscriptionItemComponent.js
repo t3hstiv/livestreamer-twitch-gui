@@ -27,7 +27,7 @@ export default ListItemComponent.extend({
 		var banner =  get( this, "channel.profile_banner" )
 		           || get( this, "channel.video_banner" )
 		           || "";
-		return ( "background-image:url(\"" + banner + "\")" ).htmlSafe();
+		return `background-image:url("${ banner }")`.htmlSafe();
 	}.property( "channel.profile_banner", "channel.video_banner" ),
 
 	hasEnded: function() {

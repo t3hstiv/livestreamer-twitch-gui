@@ -38,7 +38,7 @@ export default Component.extend({
 			list.remove( name );
 		});
 
-		list.add( "theme-" + theme );
+		list.add( `theme-${ theme }` );
 	}.observes( "themes", "theme" ).on( "init" ),
 
 	willInsertElement: function() {

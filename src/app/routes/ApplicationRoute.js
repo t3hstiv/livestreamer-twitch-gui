@@ -10,7 +10,7 @@ var { service } = inject;
 var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
 
 function fnModalTemplateName( _, a, b ) {
-	return "modal" + a.toUpperCase() + b;
+	return `modal${ a.toUpperCase() }${ b }`;
 }
 
 
@@ -30,7 +30,7 @@ export default Route.extend({
 		"refresh": function() {
 			var routeName = get( this.controller, "currentRouteName" );
 			if ( routeName !== "error" ) {
-				this.container.lookup( "route:" + routeName ).refresh();
+				this.container.lookup( `route:${ routeName }` ).refresh();
 			}
 		},
 

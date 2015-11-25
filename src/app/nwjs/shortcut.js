@@ -23,7 +23,7 @@ export function createShortcut( name ) {
 		// this is required for toast notifications on windows 8+
 		// https://github.com/nwjs/nwjs/wiki/Notification#windows
 		var resolved = resolvePath( config[ "shortcut-path" ] );
-		var filename = name + ".lnk";
+		var filename = `${ name }.lnk`;
 		var shortcut = PATH.join( resolved, filename );
 		nwGui.App.createShortcut( shortcut );
 	}

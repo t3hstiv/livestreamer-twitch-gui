@@ -32,13 +32,15 @@ export default Controller.extend({
 			return "You're not logged in";
 		}
 
-		return "Logged in as " + get( this, "auth.session.user_name" )
-			+ ( get( this, "notif_running" )
-				? "\nDesktop notifications enabled"
-				: get( this, "notif_error" )
-					? "\nDesktop notifications error"
-					: ""
-			);
+		var userName = get( this, "auth.session.user_name" );
+		var running  = get( this, "notif_running" );
+		var error    = get( this, "notif_error" );
+
+		return `Logged in as ${ userName }${ running
+			? "\nDesktop notifications enabled"
+			: error
+				? "\nDesktop notifications error"
+				: "" }`;
 	}.property( "loginSuccess", "notif_running", "notif_error" ),
 
 
