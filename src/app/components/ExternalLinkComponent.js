@@ -20,7 +20,7 @@ export default Component.extend({
 	},
 
 	didInsertElement: function() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 ) {
 				e.preventDefault();

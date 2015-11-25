@@ -120,7 +120,7 @@ export default Mixin.create({
 
 
 	beforeModel: function() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		// reset on route change
 		set( this, "offset", 0 );
@@ -128,7 +128,7 @@ export default Mixin.create({
 	},
 
 	setupController: function( controller, model ) {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		// late bindings
 		var binding = get( this, "_binding_offset" );

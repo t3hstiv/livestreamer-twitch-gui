@@ -21,6 +21,6 @@ export default Helper.extend({
 			cancel( this._interval );
 		}
 
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 	}
 });

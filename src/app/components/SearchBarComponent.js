@@ -39,7 +39,7 @@ export default Component.extend({
 
 
 	init: function() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		this.content.volatile();
 
