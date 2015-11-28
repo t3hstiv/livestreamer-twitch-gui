@@ -5,7 +5,7 @@ import {
 	inject,
 	Service
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
@@ -83,7 +83,7 @@ export default Service.extend({
 
 	_openDefaultBrowser: function( url ) {
 		return new Promise(function( resolve ) {
-			nwGui.Shell.openExternal( url );
+			Shell.openExternal( url );
 			next( resolve );
 		});
 	},

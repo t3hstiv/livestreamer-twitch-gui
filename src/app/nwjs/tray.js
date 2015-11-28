@@ -2,11 +2,13 @@ import {
 	get,
 	Object as EmberObject
 } from "Ember";
-import nwGui from "nwjs/nwGui";
-import nwWindow from "nwjs/nwWindow";
+import {
+	Menu,
+	MenuItem,
+	Tray,
+	mainWindow
+} from "nwjs/nwjs";
 
-
-var { Menu, MenuItem, Tray } = nwGui;
 
 var isOSX = process.platform === "darwin";
 var staticItems = [
@@ -19,7 +21,7 @@ var staticItems = [
 	{
 		label: "Close application",
 		click: function() {
-			nwWindow.close();
+			mainWindow.close();
 		}
 	}
 ];

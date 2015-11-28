@@ -6,7 +6,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import which from "utils/fs/which";
 import stat from "utils/fs/stat";
@@ -414,13 +414,13 @@ export default Controller.extend( ChannelSettingsMixin, {
 		switch ( get( this, "settings.gui_minimize" ) ) {
 			// minimize
 			case 1:
-				nwWindow.toggleMinimize( restore );
+				mainWindow.toggleMinimize( restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
 			case 2:
-				nwWindow.toggleVisibility( restore );
+				mainWindow.toggleVisibility( restore );
 				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
-					nwWindow.setShowInTaskbar( restore );
+					mainWindow.setShowInTaskbar( restore );
 				}
 				break;
 		}

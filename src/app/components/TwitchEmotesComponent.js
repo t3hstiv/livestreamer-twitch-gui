@@ -3,7 +3,7 @@ import {
 	computed,
 	inject
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 import FormButtonComponent from "components/FormButtonComponent";
 
 
@@ -33,7 +33,7 @@ export default FormButtonComponent.extend({
 
 			if ( url && channel ) {
 				url = url.replace( "{channel}", channel );
-				nwGui.Shell.openExternal( url );
+				Shell.openExternal( url );
 				success();
 
 			} else {

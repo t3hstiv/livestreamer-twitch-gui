@@ -5,7 +5,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Clipboard } from "nwjs/nwjs";
 
 
 var { readOnly } = computed;
@@ -41,7 +41,7 @@ export default Controller.extend({
 
 		"copyToken": function( success, failure ) {
 			var token = get( this, "auth.session.access_token" );
-			var cb = nwGui.Clipboard.get();
+			var cb = Clipboard.get();
 
 			if ( token && cb ) {
 				cb.set( token, "text" );

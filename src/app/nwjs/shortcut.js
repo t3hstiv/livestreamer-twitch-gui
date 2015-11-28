@@ -1,4 +1,4 @@
-import nwGui from "nwjs/nwGui";
+import { App } from "nwjs/nwjs";
 import { sort } from "utils/semver";
 import resolvePath from "utils/resolvePath";
 import metadata from "json!root/metadata";
@@ -25,6 +25,6 @@ export function createShortcut( name ) {
 		var resolved = resolvePath( config[ "shortcut-path" ] );
 		var filename = `${ name }.lnk`;
 		var shortcut = PATH.join( resolved, filename );
-		nwGui.App.createShortcut( shortcut );
+		App.createShortcut( shortcut );
 	}
 }

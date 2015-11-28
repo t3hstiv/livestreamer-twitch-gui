@@ -4,7 +4,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 
 
 var { readOnly } = computed;
@@ -46,11 +46,11 @@ export default Controller.extend({
 
 	actions: {
 		"winRefresh": function() {
-			nwWindow.reloadIgnoringCache();
+			mainWindow.reloadIgnoringCache();
 		},
 
 		"winDevTools": function() {
-			nwWindow.showDevTools();
+			mainWindow.showDevTools();
 		},
 
 		"winMin": function() {
@@ -59,14 +59,14 @@ export default Controller.extend({
 
 			// tray only or both with min2tray: just hide the window
 			if ( integration === 2 || integration === 3 && minimizetotray ) {
-				nwWindow.toggleVisibility( false );
+				mainWindow.toggleVisibility( false );
 			} else {
-				nwWindow.toggleMinimize( false );
+				mainWindow.toggleMinimize( false );
 			}
 		},
 
 		"winMax": function() {
-			nwWindow.toggleMaximize();
+			mainWindow.toggleMaximize();
 		},
 
 		"winClose": function() {
@@ -78,7 +78,7 @@ export default Controller.extend({
 		},
 
 		"quit": function() {
-			nwWindow.close( true );
+			mainWindow.close( true );
 		},
 
 		"shutdown": function() {

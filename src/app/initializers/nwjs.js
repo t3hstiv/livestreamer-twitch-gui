@@ -3,8 +3,10 @@ import {
 	addObserver,
 	Application
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
-import nwScreen from "nwjs/nwScreen";
+import {
+	mainWindow,
+	Screen
+} from "nwjs/nwjs";
 import tray from "nwjs/tray";
 import { createShortcut } from "nwjs/shortcut";
 import { createMacNativeMenuBar } from "nwjs/menu";
@@ -17,8 +19,8 @@ import {
 
 window.addEventListener( "beforeunload", function() {
 	// remove all listeners
-	nwWindow.removeAllListeners();
-	nwScreen.removeAllListeners();
+	mainWindow.removeAllListeners();
+	Screen.removeAllListeners();
 	process.removeAllListeners();
 	// prevent tray icons from stacking up when refreshing the page or devtools
 	tray.remove();
@@ -29,19 +31,19 @@ var isHidden    = true;
 var isMaximized = false;
 var isMinimized = false;
 
-nwWindow.on( "maximize",   function onMaximize()   { isMaximized = true;  } );
-nwWindow.on( "unmaximize", function onUnmaximize() { isMaximized = false; } );
-nwWindow.on( "minimize",   function onMinimize()   { isMinimized = true;  } );
-nwWindow.on( "restore",    function onRestore()    { isMinimized = false; } );
+mainWindow.on( "maximize",   function onMaximize()   { isMaximized = true;  } );
+mainWindow.on( "unmaximize", function onUnmaximize() { isMaximized = false; } );
+mainWindow.on( "minimize",   function onMinimize()   { isMinimized = true;  } );
+mainWindow.on( "restore",    function onRestore()    { isMinimized = false; } );
 
 
-nwWindow.on( "ready", function onReady( settings ) {
+mainWindow.on( "ready", function onReady( settings ) {
 	// taskbar and tray OS integrations
 	function onIntegrationChange() {
 		var taskbar = get( settings, "isVisibleInTaskbar" );
 		var tray    = get( settings, "isVisibleInTray" );
-		nwWindow.setShowInTaskbar( taskbar );
-		nwWindow.setShowInTray( tray, taskbar );
+		mainWindow.setShowInTaskbar( taskbar );
+		mainWindow.setShowInTray( tray, taskbar );
 	}
 	// observe the settings record
 	addObserver( settings, "gui_integration", onIntegrationChange );
@@ -50,22 +52,22 @@ nwWindow.on( "ready", function onReady( settings ) {
 
 	// hide in tray
 	if ( argvTray ) {
-		nwWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
+		mainWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
 		// remove the tray icon after clicking it if it's disabled in the settings
 		if ( !get( settings, "isVisibleInTray" ) ) {
 			tray.tray.once( "click", tray.remove.bind( tray ) );
 		}
 	} else {
-		nwWindow.toggleVisibility( true );
+		mainWindow.toggleVisibility( true );
 	}
 
 	// maximize window
 	if ( argvMax ) {
-		nwWindow.toggleMaximize( false );
+		mainWindow.toggleMaximize( false );
 	}
 	// minimize window
 	if ( argvMin ) {
-		nwWindow.toggleMinimize( false );
+		mainWindow.toggleMinimize( false );
 	}
 
 	if ( DEBUG ) {
@@ -74,33 +76,33 @@ nwWindow.on( "ready", function onReady( settings ) {
 });
 
 
-nwWindow.toggleMaximize = function toggleMaximize( bool ) {
+mainWindow.toggleMaximize = function toggleMaximize( bool ) {
 	if ( bool === undefined ) { bool = isMaximized; }
-	nwWindow[ bool ? "unmaximize" : "maximize" ]();
+	mainWindow[ bool ? "unmaximize" : "maximize" ]();
 };
 
-nwWindow.toggleMinimize = function toggleMinimize( bool ) {
+mainWindow.toggleMinimize = function toggleMinimize( bool ) {
 	if ( bool === undefined ) { bool = isMinimized; }
-	nwWindow[ bool ? "restore" : "minimize" ]();
+	mainWindow[ bool ? "restore" : "minimize" ]();
 };
 
-nwWindow.toggleVisibility = function toggleVisibility( bool ) {
+mainWindow.toggleVisibility = function toggleVisibility( bool ) {
 	if ( bool === undefined ) { bool = isHidden; }
-	nwWindow[ bool ? "show" : "hide" ]();
+	mainWindow[ bool ? "show" : "hide" ]();
 	isHidden = !bool;
 };
 
 
-nwWindow.setShowInTray = function setShowInTray( bool, taskbar ) {
+mainWindow.setShowInTray = function setShowInTray( bool, taskbar ) {
 	// always remove the tray icon...
 	// we need a new click event listener in case the taskbar param has changed
 	tray.remove();
 	if ( bool ) {
 		tray.add(function() {
-			nwWindow.toggleVisibility();
+			mainWindow.toggleVisibility();
 			// also toggle taskbar visiblity on click (gui_integration === both)
 			if ( taskbar ) {
-				nwWindow.setShowInTaskbar( !isHidden );
+				mainWindow.setShowInTaskbar( !isHidden );
 			}
 		});
 	}
@@ -125,17 +127,17 @@ Application.instanceInitializer({
 
 
 		// listen for the close event and show the dialog instead of strictly shutting down
-		nwWindow.on( "close", function() {
+		mainWindow.on( "close", function() {
 			if ( location.pathname !== "/index.html" ) {
-				return nwWindow.close( true );
+				return mainWindow.close( true );
 			}
 
 			try {
-				nwWindow.show();
-				nwWindow.focus();
+				mainWindow.show();
+				mainWindow.focus();
 				application.lookup( "controller:application" ).send( "winClose" );
 			} catch ( e ) {
-				nwWindow.close( true );
+				mainWindow.close( true );
 			}
 		});
 	}

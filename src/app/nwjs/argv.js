@@ -1,8 +1,8 @@
-import nwGui from "nwjs/nwGui";
+import { App } from "nwjs/nwjs";
 import { some } from "utils/contains";
 
 
-var { fullArgv } = nwGui.App;
+const { fullArgv } = App;
 
 
 export var tray = some.call( fullArgv, "--tray", "--hide", "--hidden" );

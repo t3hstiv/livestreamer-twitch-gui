@@ -5,7 +5,7 @@ import {
 	LSSerializer
 } from "EmberData";
 import {} from "initializers/initializers";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 
 // Routing
 import Router from "router";
@@ -485,7 +485,7 @@ export default Application.create({
 		var settings = this.__container__.lookup( "service:settings" );
 		settings.addObserver( "content", function() {
 			if ( !settings.get( "content" ) ) { return; }
-			nwWindow.emit( "ready", settings );
+			mainWindow.emit( "ready", settings );
 		});
 	},
 

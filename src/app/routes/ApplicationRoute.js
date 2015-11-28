@@ -3,7 +3,7 @@ import {
 	inject,
 	Route
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 
 
 var { service } = inject;
@@ -52,7 +52,7 @@ export default Route.extend({
 		},
 
 		"openBrowser": function( url ) {
-			nwGui.Shell.openExternal( url );
+			Shell.openExternal( url );
 		},
 
 		"openLivestreamer": function( stream ) {

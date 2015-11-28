@@ -6,16 +6,18 @@ import {
 	run,
 	Application
 } from "Ember";
-import nwGui from "nwjs/nwGui";
-import nwWindow from "nwjs/nwWindow";
-import nwScreen from "nwjs/nwScreen";
+import {
+	App,
+	Screen,
+	mainWindow
+} from "nwjs/nwjs";
 import {
 	resetwindow as argvResetwindow
 } from "nwjs/argv";
 
 
 var { debounce } = run;
-var { manifest } = nwGui.App;
+var { manifest } = App;
 
 var concat = [].concat;
 
@@ -43,7 +45,7 @@ function onResize( width, height ) {
 	if ( ignore ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, { width, height });
+	save.call( this, { width, height } );
 }
 
 function onMove( x, y ) {
@@ -54,7 +56,7 @@ function onMove( x, y ) {
 	if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, { x, y });
+	save.call( this, { x, y } );
 }
 
 function ignoreNextEvent() {
@@ -71,13 +73,13 @@ function restoreWindow() {
 	var width  = get( this, "width" );
 	var height = get( this, "height" );
 	if ( width !== null && height !== null ) {
-		nwWindow.resizeTo( width, height );
+		mainWindow.resizeTo( width, height );
 	}
 
 	var x = get( this, "x" );
 	var y = get( this, "y" );
 	if ( x !== null && y !== null ) {
-		nwWindow.moveTo( x, y );
+		mainWindow.moveTo( x, y );
 	}
 }
 
@@ -93,14 +95,14 @@ function resetWindow() {
 
 function resetWindowPosition() {
 	// use the DE's main screen and the minimum window size
-	var screen = nwScreen.screens[0].bounds;
-	var w = manifest.window.width;
-	var h = manifest.window.height;
+	var screen = Screen.screens[0].bounds;
+	var { width: w, height: h } = manifest.window;
+
 	// center the window and don't forget the screen offset
-	nwWindow.width  = w;
-	nwWindow.height = h;
-	nwWindow.x = Math.round( screen.x + ( screen.width  - w ) / 2 );
-	nwWindow.y = Math.round( screen.y + ( screen.height - h ) / 2 );
+	mainWindow.width  = w;
+	mainWindow.height = h;
+	mainWindow.x = Math.round( screen.x + ( screen.width  - w ) / 2 );
+	mainWindow.y = Math.round( screen.y + ( screen.height - h ) / 2 );
 	// also reset the saved window position
 	resetWindow.call( this );
 }
@@ -113,13 +115,10 @@ function onDisplayBoundsChanged() {
 }
 
 function isWindowFullyVisible() {
-	var x = nwWindow.x;
-	var y = nwWindow.y;
-	var w = nwWindow.width;
-	var h = nwWindow.height;
+	var { x, y, width: w, height: h } = mainWindow;
 
 	// the window needs to be fully visible on one screen
-	return nwScreen.screens.some(function( screenObj ) {
+	return Screen.screens.some(function( screenObj ) {
 		var bounds = screenObj.bounds;
 		// substract screen offset from window position
 		var posX = x - bounds.x;
@@ -146,32 +145,32 @@ Application.instanceInitializer({
 					? records.objectAt( 0 )
 					: store.createRecord( "window", { id: 1 } ).save();
 			})
-			.then(function( Window ) {
+			.then(function( record ) {
 				// reset window
 				if ( argvResetwindow ) {
-					resetWindow.call( Window );
+					resetWindow.call( record );
 				} else {
-					restoreWindow.call( Window );
+					restoreWindow.call( record );
 					// validate restored window position and reset if it's invalid
 					if ( !isWindowFullyVisible() ) {
-						resetWindowPosition.call( Window );
+						resetWindowPosition.call( record );
 					}
 				}
 
 				// listen for screen changes
-				nwScreen.on( "displayBoundsChanged", onDisplayBoundsChanged.bind( Window ) );
+				Screen.on( "displayBoundsChanged", onDisplayBoundsChanged.bind( record ) );
 
 				// also listen for the maximize events
 				// we don't want to save the window size+pos after these events
-				nwWindow.on(   "maximize", ignoreNextEvent );
-				nwWindow.on( "unmaximize", ignoreNextEvent );
-				nwWindow.on(   "minimize", ignoreNextEvent );
-				nwWindow.on(    "restore", ignoreNextEvent );
+				mainWindow.on(   "maximize", ignoreNextEvent );
+				mainWindow.on( "unmaximize", ignoreNextEvent );
+				mainWindow.on(   "minimize", ignoreNextEvent );
+				mainWindow.on(    "restore", ignoreNextEvent );
 
 				// resize and move events need to be defered
 				// the maximize events are triggered afterwards
-				nwWindow.on( "resize", deferEvent( Window, onResize ) );
-				nwWindow.on(   "move", deferEvent( Window, onMove   ) );
+				mainWindow.on( "resize", deferEvent( record, onResize ) );
+				mainWindow.on(   "move", deferEvent( record, onMove   ) );
 			});
 	}
 });

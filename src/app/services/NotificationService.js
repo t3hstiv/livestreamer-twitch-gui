@@ -6,7 +6,7 @@ import {
 	inject,
 	Service
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 import tray from "nwjs/tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import mkdirp from "utils/fs/mkdirp";
@@ -111,7 +111,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			label = String( num );
 		}
 		// update badge label or remove it
-		nwWindow.setBadgeLabel( label );
+		mainWindow.setBadgeLabel( label );
 	}.observes( "running", "settings.notify_badgelabel", "model" ),
 
 
@@ -330,8 +330,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	notificationClick: function( settings, stream ) {
 		// always restore the window
 		if ( settings !== 0 ) {
-			nwWindow.toggleMinimize( true );
-			nwWindow.toggleVisibility( true );
+			mainWindow.toggleMinimize( true );
+			mainWindow.toggleVisibility( true );
 		}
 
 		// FIXME: refactor global openLivestreamer and openBrowser actions
