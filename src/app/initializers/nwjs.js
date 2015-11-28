@@ -15,6 +15,7 @@ import {
 	max as argvMax,
 	min as argvMin
 } from "nwjs/argv";
+import { isDarwin } from "utils/platform";
 
 
 window.addEventListener( "beforeunload", function() {
@@ -121,7 +122,7 @@ Application.instanceInitializer({
 
 		createShortcut( displayName );
 		tray.init( displayName, trayIconImg, trayIconImgOSX );
-		if ( process.platform === "darwin" ) {
+		if ( isDarwin ) {
 			createMacNativeMenuBar( displayName );
 		}
 

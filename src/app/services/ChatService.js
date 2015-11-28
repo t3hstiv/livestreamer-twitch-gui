@@ -12,6 +12,8 @@ import Substitution from "utils/Substitution";
 import resolvePath from "utils/resolvePath";
 import which from "utils/fs/which";
 import stat from "utils/fs/stat";
+import platform from "utils/platform";
+import { isWin } from "utils/platform";
 import CP from "commonjs!child_process";
 import PATH from "commonjs!path";
 
@@ -19,9 +21,6 @@ import PATH from "commonjs!path";
 var { readOnly } = computed;
 var { next } = run;
 var { service } = inject;
-
-var platform = process.platform;
-var isWin = platform === "win32";
 
 function checkExec( stat ) {
 	return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );

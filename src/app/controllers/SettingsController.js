@@ -6,6 +6,7 @@ import {
 	Controller
 } from "Ember";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import { isLinux } from "utils/platform";
 
 
 var { equal } = computed;
@@ -57,7 +58,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
 	// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
-	hasNotificationClickSupport: process.platform !== "linux",
+	hasNotificationClickSupport: !isLinux,
 
 	playerCmdSubstitutionsVisible: false,
 	playerCmdSubstitutions: function() {

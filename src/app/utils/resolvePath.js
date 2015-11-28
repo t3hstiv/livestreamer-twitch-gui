@@ -1,3 +1,4 @@
+import { isWin } from "utils/platform";
 import PATH from "commonjs!path";
 
 
@@ -19,6 +20,6 @@ function resolvePathUnix( path ) {
 }
 
 
-export default process.platform === "win32"
+export default isWin
 	? resolvePathWindows
 	: resolvePathUnix;

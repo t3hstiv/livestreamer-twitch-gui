@@ -1,9 +1,10 @@
 import stat from "utils/fs/stat";
+import { isWin } from "utils/platform";
 import PATH from "commonjs!path";
 
 
 var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
-var exts  = process.platform === "win32" ? [ ".exe" ] : [ "" ];
+var exts  = isWin ? [ ".exe" ] : [ "" ];
 var sep   = PATH.sep;
 
 

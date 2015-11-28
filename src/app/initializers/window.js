@@ -14,14 +14,13 @@ import {
 import {
 	resetwindow as argvResetwindow
 } from "nwjs/argv";
+import { isWin } from "utils/platform";
 
 
 var { debounce } = run;
 var { manifest } = App;
 
 var concat = [].concat;
-
-var isWin = process.platform === "win32";
 
 var timeEvent  = 1000;
 var timeIgnore = 2000;

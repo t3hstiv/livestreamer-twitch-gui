@@ -7,11 +7,10 @@ import {
 	attr,
 	Model
 } from "EmberData";
+import { isWin } from "utils/platform";
 
 
 var { service } = inject;
-
-var isWin = process.platform === "win32";
 
 function defaultLangFilterValue( model ) {
 	var codes = get( model, "metadata.config.language_codes" );

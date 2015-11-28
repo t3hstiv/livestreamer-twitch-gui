@@ -8,9 +8,9 @@ import {
 	Tray,
 	mainWindow
 } from "nwjs/nwjs";
+import { isDarwin } from "utils/platform";
 
 
-var isOSX = process.platform === "darwin";
 var staticItems = [
 	{
 		label: "Toggle window",
@@ -64,7 +64,7 @@ export default EmberObject.extend({
 	iconRes: function() {
 		var dpr = window.devicePixelRatio;
 
-		if ( isOSX ) {
+		if ( isDarwin ) {
 			var hidpi = dpr > 2
 				? "@3x"
 				: dpr > 1

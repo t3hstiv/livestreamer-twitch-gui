@@ -12,14 +12,13 @@ import which from "utils/fs/which";
 import stat from "utils/fs/stat";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { getMax } from "utils/semver";
+import { isWin } from "utils/platform";
 import CP from "commonjs!child_process";
 import PATH from "commonjs!path";
 
 
 var { later, schedule } = run;
 var { service } = inject;
-
-var isWin = process.platform === "win32";
 
 var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
 var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
