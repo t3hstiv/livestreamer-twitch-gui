@@ -1,7 +1,4 @@
-import {
-	isNone,
-	makeArray
-} from "Ember";
+import { makeArray } from "Ember";
 
 
 var concat = [].concat;
@@ -14,7 +11,7 @@ export default function preload( withError, list ) {
 	}
 
 	function promiseImage( src ) {
-		if ( isNone( src ) ) {
+		if ( !src ) {
 			return Promise.resolve();
 		}
 

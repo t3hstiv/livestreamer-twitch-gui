@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.11.0",
+	"version": "0.11.1",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -73,6 +73,7 @@
 			"user_subscriptions",
 			"chat_login"
 		],
+		"image-expiration-time": 60,
 		"language_codes": {
 			"cs":    { "flag": "cz", "lang": "czech" },
 			"da":    { "flag": "dk", "lang": "danish" },

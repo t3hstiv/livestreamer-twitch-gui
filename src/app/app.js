@@ -77,6 +77,11 @@ import TwitchProductSerializer from "models/twitch/ProductSerializer";
 import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
 import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
 
+import TwitchChannelPanel from "models/twitch/ChannelPanel";
+import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
+import TwitchChannelPanelItem from "models/twitch/ChannelPanelItem";
+import TwitchChannelPanelItemSerializer from "models/twitch/ChannelPanelItemSerializer";
+
 // Ember additions/changes/fixes
 import BooleanTransform from "store/BooleanTransform";
 import LinkComponent from "components/LinkComponent";
@@ -148,6 +153,7 @@ import CheckBoxComponent from "components/CheckBoxComponent";
 import RadioButtonComponent from "components/RadioButtonComponent";
 import RadioButtonsComponent from "components/RadioButtonsComponent";
 import FileSelectComponent from "components/FileSelectComponent";
+import StreamPresentationComponent from "components/StreamPresentationComponent";
 import GameItemComponent from "components/GameItemComponent";
 import StreamItemComponent from "components/StreamItemComponent";
 import ChannelItemComponent from "components/ChannelItemComponent";
@@ -169,6 +175,8 @@ import DropDownComponent from "components/DropDownComponent";
 import ModalLogComponent from "components/ModalLogComponent";
 import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
 import HeadlineTotalsComponent from "components/HeadlineTotalsComponent";
+import ChannelPanelsComponent from "components/ChannelPanelsComponent";
+import PanelItemComponent from "components/PanelItemComponent";
 
 // Content
 import FeaturedRoute from "routes/FeaturedRoute";
@@ -321,6 +329,11 @@ export default Application.create({
 	TwitchProductEmoticon,
 	TwitchProductEmoticonSerializer,
 
+	TwitchChannelPanel,
+	TwitchChannelPanelSerializer,
+	TwitchChannelPanelItem,
+	TwitchChannelPanelItemSerializer,
+
 	// Ember additions/changes/fixes
 	BooleanTransform,
 	LinkComponent,
@@ -392,6 +405,7 @@ export default Application.create({
 	RadioButtonComponent,
 	RadioButtonsComponent,
 	FileSelectComponent,
+	StreamPresentationComponent,
 	GameItemComponent,
 	StreamItemComponent,
 	ChannelItemComponent,
@@ -413,6 +427,8 @@ export default Application.create({
 	ModalLogComponent,
 	LoadingSpinnerComponent,
 	HeadlineTotalsComponent,
+	ChannelPanelsComponent,
+	PanelItemComponent,
 
 
 	// Content
