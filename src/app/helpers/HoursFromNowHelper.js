@@ -7,22 +7,23 @@ var hour   = 60 * minute;
 var day    = 24 * hour;
 
 function formatMinutes( diff, short ) {
-	var minutes = Math.floor( diff / minute );
-	return ( !short && minutes < 10 ? "0" : "" ) + minutes.toFixed( 0 ) + "m";
+	var minutes     = Math.floor( diff / minute );
+	var leadingZero = !short && minutes < 10 ? "0" : "";
+	return `${ leadingZero }${ minutes.toFixed( 0 ) }m`;
 }
 
 function formatHours( diff, short ) {
-	var hours     = Math.floor( diff / hour );
+	var hours     = Math.floor( diff / hour ).toFixed( 0 );
 	var remaining = diff % hour;
-	return hours.toFixed( 0 ) + "h"
-		+ ( !short && remaining > minute ? formatMinutes( remaining, true ) : "" );
+	var minutes   = !short && remaining > minute ? formatMinutes( remaining, true ) : "";
+	return `${ hours }h${ minutes }`;
 }
 
 function formatDays( diff ) {
-	var days      = Math.floor( diff / day );
+	var days      = Math.floor( diff / day ).toFixed( 0 );
 	var remaining = diff % day;
-	return days.toFixed( 0 ) + "d"
-		+ ( remaining > hour ? formatHours( remaining, true ) : "" );
+	var hours     = remaining > hour ? formatHours( remaining, true ) : "";
+	return `${ days }d${ hours }`;
 }
 
 

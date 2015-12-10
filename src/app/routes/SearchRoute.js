@@ -90,7 +90,7 @@ export default Route.extend( InfiniteScrollMixin, {
 	},
 
 	setupController: function( controller ) {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		set( controller,  "filter", get(  this,  "filter" ) );
 		set( controller,   "query", get(  this,   "query" ) );

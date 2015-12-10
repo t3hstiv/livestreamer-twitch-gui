@@ -2,13 +2,15 @@ import {
 	get,
 	Object as EmberObject
 } from "Ember";
-import nwGui from "nwjs/nwGui";
-import nwWindow from "nwjs/nwWindow";
+import {
+	Menu,
+	MenuItem,
+	Tray,
+	mainWindow
+} from "nwjs/nwjs";
+import { isDarwin } from "utils/platform";
 
 
-var { Menu, MenuItem, Tray } = nwGui;
-
-var isOSX = process.platform === "darwin";
 var staticItems = [
 	{
 		label: "Toggle window",
@@ -19,7 +21,7 @@ var staticItems = [
 	{
 		label: "Close application",
 		click: function() {
-			nwWindow.close();
+			mainWindow.close();
 		}
 	}
 ];
@@ -62,7 +64,7 @@ export default EmberObject.extend({
 	iconRes: function() {
 		var dpr = window.devicePixelRatio;
 
-		if ( isOSX ) {
+		if ( isDarwin ) {
 			var hidpi = dpr > 2
 				? "@3x"
 				: dpr > 1

@@ -1,12 +1,12 @@
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 
 
 export function removeAll() {
-	var Cookies = nwWindow.cookies;
+	var Cookies = mainWindow.cookies;
 	Cookies.getAll( {}, function( cookies ) {
 		[].forEach.call( cookies, function( c ) {
 			Cookies.remove({
-				url: "http" + ( c.secure ? "s" : "" ) + "://" + c.domain + c.path,
+				url: `http${ c.secure ? "s" : "" }://${ c.domain }${ c.path }`,
 				name: c.name
 			});
 		});

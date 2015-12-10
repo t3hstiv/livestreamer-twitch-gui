@@ -31,7 +31,7 @@ export default LinkComponent.reopen({
 				targetObject.send( "refresh" );
 			}
 		} else {
-			this._super.apply( this, arguments );
+			this._super( ...arguments );
 		}
 	}
 });

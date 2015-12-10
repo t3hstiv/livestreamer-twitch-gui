@@ -5,13 +5,15 @@ import {
 	inject,
 	Service
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
 import resolvePath from "utils/resolvePath";
 import which from "utils/fs/which";
 import stat from "utils/fs/stat";
+import platform from "utils/platform";
+import { isWin } from "utils/platform";
 import CP from "commonjs!child_process";
 import PATH from "commonjs!path";
 
@@ -19,9 +21,6 @@ import PATH from "commonjs!path";
 var { readOnly } = computed;
 var { next } = run;
 var { service } = inject;
-
-var platform = process.platform;
-var isWin = platform === "win32";
 
 function checkExec( stat ) {
 	return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );
@@ -83,7 +82,7 @@ export default Service.extend({
 
 	_openDefaultBrowser: function( url ) {
 		return new Promise(function( resolve ) {
-			nwGui.Shell.openExternal( url );
+			Shell.openExternal( url );
 			next( resolve );
 		});
 	},
@@ -192,16 +191,16 @@ export default Service.extend({
 		var javaArgs   = data[ "args" ];
 		var javaExec   = data[ "exec" ][ platform ];
 		var fbPaths    = data[ "fallback" ][ platform ];
-		var chattyArgs = data[ "chatty-args" ];
+		var args       = data[ "chatty-args" ];
 		var chattyFb   = data[ "chatty-fallback" ];
 
 		// object containing all the required data
 		var obj = {
-			args   : chattyArgs,
-			chatty : chatty,
-			user   : user,
-			token  : token,
-			channel: channel
+			args,
+			chatty,
+			user,
+			token,
+			channel
 		};
 		// just a single custom parameter, so a string can be defined in package.json
 		var parameters = [
@@ -245,7 +244,7 @@ export default Service.extend({
 					});
 			})
 			.then(function( exec ) {
-				obj.args = javaArgs + " " + obj.args;
+				obj.args = `${ javaArgs } ${ obj.args }`;
 				substitutions.push( new Substitution( "chatty", "chatty" ) );
 
 				var params = Parameter.getParameters( obj, parameters, substitutions );
@@ -259,11 +258,11 @@ export default Service.extend({
 		var user   = get( this, "auth.session.user_name" );
 		var params = Parameter.getParameters(
 			{
-				command: command,
-				channel: channel,
-				url    : url,
-				user   : user,
-				token  : token
+				command,
+				channel,
+				url,
+				user,
+				token
 			},
 			[
 				new ParameterCustom( null, "command", true )

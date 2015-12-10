@@ -12,7 +12,7 @@ var { service } = inject;
 export default ExternalLinkComponent.extend({
 	metadata: service(),
 
-	layout: layout,
+	layout,
 
 	tagName: "span",
 	classNameBindings: [ ":docs" ],

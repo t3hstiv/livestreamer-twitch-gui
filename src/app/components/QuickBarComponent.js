@@ -11,7 +11,7 @@ var { cancel, later } = run;
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "div",
 	classNameBindings: [
 		":quick-bar-component",

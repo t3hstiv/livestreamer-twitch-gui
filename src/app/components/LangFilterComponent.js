@@ -7,15 +7,15 @@ import layout from "hbs!templates/components/LangFilterComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "li",
 
 	init: function() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		var prop = get( this, "prop" );
 		var binding = Binding
-			.from( "obj." + prop )
+			.from( `obj.${ prop }` )
 			.to( "checked" );
 		binding.connect( this );
 	}

@@ -2,7 +2,7 @@ import {
 	get,
 	inject
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Clipboard } from "nwjs/nwjs";
 import FormButtonComponent from "components/FormButtonComponent";
 
 
@@ -22,7 +22,7 @@ export default FormButtonComponent.extend({
 	actions: {
 		"share": function( success, failure ) {
 			var url = get( this, "channel.url" );
-			var cb  = nwGui.Clipboard.get();
+			var cb  = Clipboard.get();
 
 			if ( url && cb ) {
 				cb.set( url, "text" );

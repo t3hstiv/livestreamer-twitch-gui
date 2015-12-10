@@ -3,14 +3,14 @@ import {
 	inject,
 	Route
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 
 
 var { service } = inject;
 var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
 
 function fnModalTemplateName( _, a, b ) {
-	return "modal" + a.toUpperCase() + b;
+	return `modal${ a.toUpperCase() }${ b }`;
 }
 
 
@@ -30,7 +30,7 @@ export default Route.extend({
 		"refresh": function() {
 			var routeName = get( this.controller, "currentRouteName" );
 			if ( routeName !== "error" ) {
-				this.container.lookup( "route:" + routeName ).refresh();
+				this.container.lookup( `route:${ routeName }` ).refresh();
 			}
 		},
 
@@ -52,7 +52,7 @@ export default Route.extend({
 		},
 
 		"openBrowser": function( url ) {
-			nwGui.Shell.openExternal( url );
+			Shell.openExternal( url );
 		},
 
 		"openLivestreamer": function( stream ) {

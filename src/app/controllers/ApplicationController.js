@@ -4,7 +4,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 
 
 var { readOnly } = computed;
@@ -32,23 +32,25 @@ export default Controller.extend({
 			return "You're not logged in";
 		}
 
-		return "Logged in as " + get( this, "auth.session.user_name" )
-			+ ( get( this, "notif_running" )
-				? "\nDesktop notifications enabled"
-				: get( this, "notif_error" )
-					? "\nDesktop notifications error"
-					: ""
-			);
+		var userName = get( this, "auth.session.user_name" );
+		var running  = get( this, "notif_running" );
+		var error    = get( this, "notif_error" );
+
+		return `Logged in as ${ userName }${ running
+			? "\nDesktop notifications enabled"
+			: error
+				? "\nDesktop notifications error"
+				: "" }`;
 	}.property( "loginSuccess", "notif_running", "notif_error" ),
 
 
 	actions: {
 		"winRefresh": function() {
-			nwWindow.reloadIgnoringCache();
+			mainWindow.reloadIgnoringCache();
 		},
 
 		"winDevTools": function() {
-			nwWindow.showDevTools();
+			mainWindow.showDevTools();
 		},
 
 		"winMin": function() {
@@ -57,14 +59,14 @@ export default Controller.extend({
 
 			// tray only or both with min2tray: just hide the window
 			if ( integration === 2 || integration === 3 && minimizetotray ) {
-				nwWindow.toggleVisibility( false );
+				mainWindow.toggleVisibility( false );
 			} else {
-				nwWindow.toggleMinimize( false );
+				mainWindow.toggleMinimize( false );
 			}
 		},
 
 		"winMax": function() {
-			nwWindow.toggleMaximize();
+			mainWindow.toggleMaximize();
 		},
 
 		"winClose": function() {
@@ -76,7 +78,7 @@ export default Controller.extend({
 		},
 
 		"quit": function() {
-			nwWindow.close( true );
+			mainWindow.close( true );
 		},
 
 		"shutdown": function() {

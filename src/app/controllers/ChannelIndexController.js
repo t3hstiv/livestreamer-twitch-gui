@@ -6,7 +6,7 @@ import {
 } from "Ember";
 
 
-var { alias, or } = computed;
+var { alias } = computed;
 var { service } = inject;
 
 
@@ -15,8 +15,7 @@ export default Controller.extend({
 
 	stream : alias( "model.stream" ),
 	channel: alias( "model.channel" ),
-
-	previewImage: or( "stream.preview.large_nocache", "channel.video_banner" ),
+	panels : alias( "model.panels" ),
 
 	age: function() {
 		var createdAt = get( this, "channel.created_at" );

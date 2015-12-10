@@ -7,7 +7,7 @@ import layout from "hbs!templates/components/RadioButtonsComponent";
 
 
 export default Component.extend({
-	layout: layout,
+	layout,
 	tagName: "div",
 	className: "",
 	classNameBindings: [ "boxes:radiobtns", "className" ],
@@ -23,7 +23,7 @@ export default Component.extend({
 			if ( id === undefined ) { id = i; }
 
 			// give buttons unique IDs
-			set( button, "_id", buttonName + "-" + id );
+			set( button, "_id", `${ buttonName }-${ id }` );
 
 			// use the ID as value if there was no value specified
 			if ( !button.hasOwnProperty( "value" ) ) {

@@ -3,7 +3,7 @@ import {
 	computed,
 	inject
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwjs";
 import FormButtonComponent from "components/FormButtonComponent";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 
@@ -38,11 +38,11 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	titleLoading: "",
 	titleSuccess: function() {
 		var name = get( this, "name" );
-		return "You are subscribed to " + name;
+		return `You are subscribed to ${ name }`;
 	}.property( "name" ),
 	titleFailure: function() {
 		var name = get( this, "name" );
-		return "Subscribe to " + name + " now";
+		return `Subscribe to ${ name } now`;
 	}.property( "name" ),
 
 
@@ -53,7 +53,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 
 			if ( url && name ) {
 				url = url.replace( "{channel}", name );
-				nwGui.Shell.openExternal( url );
+				Shell.openExternal( url );
 
 				if ( success instanceof Function ) {
 					success();

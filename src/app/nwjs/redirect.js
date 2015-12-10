@@ -1,4 +1,4 @@
-import nwGui from "nwjs/nwGui";
+import { App } from "nwjs/nwjs";
 
 
 var reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
@@ -26,5 +26,5 @@ export function enable( from, to ) {
 	}
 	enabled[ from ][ to ] = true;
 
-	nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
+	App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
 }

@@ -118,8 +118,9 @@ export default Controller.extend({
 			return get( record, "tag_name" );
 		}
 
+		var version = get( this, "version" );
 		// create a fake record for the current version and save a reference
-		var current = { tag_name: "v" + get( this, "version" ) };
+		var current = { tag_name: `v${ version }` };
 		// find out the maximum of fetched releases
 		var maximum = getMax( releases, getVers );
 		// and compare it with the current version

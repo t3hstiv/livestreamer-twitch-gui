@@ -381,9 +381,10 @@ QUnit.test( "Hours from now with interval", function( assert ) {
 	assert.equal( getOutput( component ), "just now", "Initial content" );
 
 	run.later(function() {
-		assert.equal( getOutput( component ), "01m", "Upgraded content" );
-
-		done();
+		run.scheduleOnce( "afterRender", function() {
+			assert.equal( getOutput( component ), "01m", "Upgraded content" );
+			done();
+		});
 	}, 100 );
 
 });

@@ -6,20 +6,19 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import { mainWindow } from "nwjs/nwjs";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import which from "utils/fs/which";
 import stat from "utils/fs/stat";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { getMax } from "utils/semver";
+import { isWin } from "utils/platform";
 import CP from "commonjs!child_process";
 import PATH from "commonjs!path";
 
 
 var { later, schedule } = run;
 var { service } = inject;
-
-var isWin = process.platform === "win32";
 
 var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
 var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
@@ -268,7 +267,7 @@ export default Controller.extend( ChannelSettingsMixin, {
 			function onExit( code ) {
 				// ignore code 0 (no error)
 				if ( code === 0 ) { return; }
-				reject( new Error( "Exit code " + code ) );
+				reject( new Error( `Exit code ${ code }` ) );
 			}
 
 			function onTimeout() {
@@ -414,13 +413,13 @@ export default Controller.extend( ChannelSettingsMixin, {
 		switch ( get( this, "settings.gui_minimize" ) ) {
 			// minimize
 			case 1:
-				nwWindow.toggleMinimize( restore );
+				mainWindow.toggleMinimize( restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
 			case 2:
-				nwWindow.toggleVisibility( restore );
+				mainWindow.toggleVisibility( restore );
 				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
-					nwWindow.setShowInTaskbar( restore );
+					mainWindow.setShowInTaskbar( restore );
 				}
 				break;
 		}

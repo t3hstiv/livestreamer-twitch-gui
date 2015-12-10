@@ -19,7 +19,7 @@ var { service } = inject;
 export default Component.extend({
 	store: service(),
 
-	layout: layout,
+	layout,
 	tagName: "nav",
 	classNames: [ "searchbar" ],
 
@@ -39,7 +39,7 @@ export default Component.extend({
 
 
 	init: function() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		this.content.volatile();
 

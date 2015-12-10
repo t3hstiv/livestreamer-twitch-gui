@@ -126,7 +126,7 @@ export default Mixin.create( Evented, {
 
 	ajax: function( url ) {
 		var adapter = this;
-		return this._super.apply( this, arguments )
+		return this._super( ...arguments )
 			.catch(function( err ) {
 				if ( err instanceof AdapterError ) {
 					var _url = reURL.exec( url );
@@ -138,7 +138,7 @@ export default Mixin.create( Evented, {
 	},
 
 	ajaxOptions: function() {
-		var hash = this._super.apply( this, arguments );
+		var hash = this._super( ...arguments );
 		hash.timeout = 10000;
 		hash.cache = false;
 
@@ -146,7 +146,7 @@ export default Mixin.create( Evented, {
 	},
 
 	isSuccess: function( status, headers, payload ) {
-		return this._super.apply( this, arguments )
+		return this._super( ...arguments )
 		    && ( payload ? !payload.error : true );
 	},
 

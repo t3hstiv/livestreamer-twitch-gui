@@ -13,12 +13,13 @@ var { cancel, later } = run;
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
 	classNameBindings: [
 		":stream-item-component",
 		"_showGame:show-game",
 		"showFlag:show-flag",
-		"faded:faded"
+		"faded:faded",
+		"expanded:expanded"
 	],
 
 	action: "openLivestreamer",

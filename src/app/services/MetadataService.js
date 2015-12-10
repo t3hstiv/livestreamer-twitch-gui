@@ -9,7 +9,7 @@ var { alias } = computed;
 
 
 export default Service.extend({
-	metadata: metadata,
+	metadata,
 
 	package     : alias( "metadata.package" ),
 	config      : alias( "metadata.package.config" ),

@@ -6,7 +6,7 @@ import {
 	Evented,
 	Service
 } from "Ember";
-import nwGui from "nwjs/nwGui";
+import { Window } from "nwjs/nwjs";
 import {
 	enable as enableRedirect
 } from "nwjs/redirect";
@@ -120,7 +120,7 @@ export default Service.extend( Evented, {
 		window.OAUTH_CALLBACK = callback;
 
 		// open window
-		var win = nwGui.Window.open(
+		var win = Window.open(
 			get( self, "url" ),
 			OAuth.window
 		);
