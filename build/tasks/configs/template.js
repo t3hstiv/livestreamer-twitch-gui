@@ -17,5 +17,39 @@ module.exports = {
 			"build/package/chocolatey/tools/chocolateyuninstall.ps1":
 				"build/resources/package/chocolatey/tools/chocolateyuninstall.ps1.tpl"
 		}
+	},
+
+	"win32installer": {
+		"options": {
+			"data": {
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= package.config['display-name'] %>",
+				"version"    : "<%= package.version %>",
+				"author"     : "<%= package.author %>",
+				"homepage"   : "<%= package.homepage %>",
+				"arch"       : "win32"
+			}
+		},
+		"files": {
+			"build/package/win32installer/installer.nsi":
+				"build/resources/package/wininstaller/installer.nsi.tpl"
+		}
+	},
+
+	"win64installer": {
+		"options": {
+			"data": {
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= package.config['display-name'] %>",
+				"version"    : "<%= package.version %>",
+				"author"     : "<%= package.author %>",
+				"homepage"   : "<%= package.homepage %>",
+				"arch"       : "win64"
+			}
+		},
+		"files": {
+			"build/package/win64installer/installer.nsi":
+				"build/resources/package/wininstaller/installer.nsi.tpl"
+		}
 	}
 };
