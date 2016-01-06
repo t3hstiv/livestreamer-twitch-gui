@@ -3,16 +3,18 @@ module.exports = function( grunt ) {
 
 	var pack = require( "../common/package" );
 
-	grunt.task.registerTask(
-		"package:chocolatey",
-		"Package for chocolatey",
-		function(){
-			var version = grunt.file.readJSON("package.json").version;
-			var releaseNotes = pack.getReleaseNotes(version);
+	grunt.task.registerMultiTask(
+		"package",
+		"Create a package",
+		function() {
+			switch ( this.target ) {
+				case "chocolatey":
+					var releaseNotes = pack.getReleaseNotes( grunt.package.version );
+					grunt.config.set( "package.chocolatey.releaseNotes", releaseNotes );
+					break;
+			}
 
-			grunt.config.set("releaseNotes", releaseNotes);
-
-			grunt.task.run(["clean:package_chocolatey", "template:chocolatey", "shell:chocolatey"]);
+			grunt.task.run( this.data.tasks );
 		}
 	);
 
