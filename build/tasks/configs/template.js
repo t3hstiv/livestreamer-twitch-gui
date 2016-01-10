@@ -51,5 +51,31 @@ module.exports = {
 			"build/package/win64installer/installer.nsi":
 				"build/resources/package/wininstaller/installer.nsi.tpl"
 		}
+	},
+
+	"osx32dmg": {
+		"options": {
+			"data": {
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= package.config['display-name'] %>"
+			}
+		},
+		"files": {
+			"build/package/osx32dmg/appdmg.json":
+				"build/resources/package/osxdmg/appdmg.json.tpl"
+		}
+	},
+
+	"osx64dmg": {
+		"options": {
+			"data": {
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= package.config['display-name'] %>"
+			}
+		},
+		"files": {
+			"build/package/osx64dmg/appdmg.json":
+				"build/resources/package/osxdmg/appdmg.json.tpl"
+		}
 	}
 };
