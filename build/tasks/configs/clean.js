@@ -16,5 +16,13 @@ module.exports = {
 
 	package_chocolatey    : [ "build/package/chocolatey/**" ],
 	package_win32installer: [ "build/package/win32installer/**" ],
-	package_win64installer: [ "build/package/win64installer/**" ]
+	package_win64installer: [ "build/package/win64installer/**" ],
+	package_osx32dmg      : [
+		"build/package/osx32dmg/**",
+		"dist/Install <%= package.config['display-name'] %> v<%= package.version %> osx32.dmg"
+	],
+	package_osx64dmg      : [
+		"build/package/osx64dmg/**",
+		"dist/Install <%= package.config['display-name'] %> v<%= package.version %> osx64.dmg"
+	]
 };

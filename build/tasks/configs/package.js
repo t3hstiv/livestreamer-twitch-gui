@@ -21,5 +21,22 @@ module.exports = {
 			"template:win64installer",
 			"shell:win64installer"
 		]
+	},
+
+	"osx32dmg": {
+		tasks: [
+			"clean:package_osx32dmg",
+			"copy:package_osx32dmg",
+			"template:osx32dmg",
+			"shell:osx32dmg"
+		]
+	},
+	"osx64dmg": {
+		tasks: [
+			"clean:package_osx64dmg",
+			"copy:package_osx64dmg",
+			"template:osx64dmg",
+			"shell:osx64dmg"
+		]
 	}
 };

@@ -63,5 +63,18 @@ module.exports = {
 		flatten: true,
 		src    : "build/resources/icons/*.png",
 		dest   : "build/releases/<%= package.name %>/linux64/icons/"
+	},
+
+	package_osx32dmg: {
+		expand : true,
+		flatten: true,
+		src    : "build/resources/package/osxdmg/*.png",
+		dest   : "build/package/osx32dmg/"
+	},
+	package_osx64dmg: {
+		expand : true,
+		flatten: true,
+		src    : "build/resources/package/osxdmg/*.png",
+		dest   : "build/package/osx64dmg/"
 	}
 };
