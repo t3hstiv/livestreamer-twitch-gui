@@ -12,6 +12,7 @@ define([
 	"helpers/MathMulHelper",
 	"helpers/MathDivHelper",
 	"helpers/FormatViewersHelper",
+	"helpers/FormatFilesizeHelper",
 	"helpers/FormatTimeHelper",
 	"helpers/HoursFromNowHelper",
 	"helpers/TimeFromNowHelper",
@@ -31,6 +32,7 @@ define([
 	MathMulHelper,
 	MathDivHelper,
 	FormatViewersHelper,
+	FormatFilesizeHelper,
 	FormatTimeHelper,
 	HoursFromNowHelper,
 	TimeFromNowHelper,
@@ -316,6 +318,47 @@ define([
 		assert.equal( getOutput( component ), "1.00m", "Millions" );
 		run( component, "set", "viewers", 1010000 );
 		assert.equal( getOutput( component ), "1.01m", "Millions" );
+
+	});
+
+
+	QUnit.test( "Format file size", function( assert ) {
+
+		registry.register( "helper:format-filesize", FormatFilesizeHelper );
+		component = Component.extend({
+			container: container,
+			size     : "",
+			layout   : compile( "{{format-filesize size}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "?", "Unexpected values" );
+		run( component, "set", "size", "foo" );
+		assert.equal( getOutput( component ), "?", "Unexpected values" );
+
+		run( component, "set", "size", Math.pow( 2,  0 ) );
+		assert.equal( getOutput( component ), "1 Bytes", "Bytes" );
+		run( component, "set", "size", Math.pow( 2, 10 ) - 1 );
+		assert.equal( getOutput( component ), "1023 Bytes", "Bytes" );
+
+		// test all available units
+		FormatFilesizeHelper.units.forEach(function( obj ) {
+			var size = obj.size;
+			var prefix = obj.prefix;
+
+			// ignore decimals
+			if ( prefix !== "Bytes" ) {
+				run( component, "set", "size", size );
+				assert.equal( getOutput( component ), "1.0 " + prefix, "1.0 " + prefix );
+				run( component, "set", "size", size * 1000 - 1 );
+				assert.equal( getOutput( component ), "999.9 " + prefix, "999.9 " + prefix );
+			}
+
+			run( component, "set", "size", size * 1000 );
+			assert.equal( getOutput( component ), "1000 " + prefix, "1000 " + prefix );
+			run( component, "set", "size", size * 1024 - 1 );
+			assert.equal( getOutput( component ), "1023 " + prefix, "1023 " + prefix );
+		});
 
 	});
 

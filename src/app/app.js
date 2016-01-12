@@ -126,6 +126,7 @@ define(function( require ) {
 		MathMulHelper: require( "helpers/MathMulHelper" ),
 		MathDivHelper: require( "helpers/MathDivHelper" ),
 		FormatViewersHelper: require( "helpers/FormatViewersHelper" ),
+		FormatFilesizeHelper: require( "helpers/FormatFilesizeHelper" ),
 		FormatTimeHelper: require( "helpers/FormatTimeHelper" ),
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
