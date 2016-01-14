@@ -5,8 +5,8 @@ define(function() {
 	return function denodify( func, thisArg ) {
 		// return the denodified function
 		return function() {
-			var args  = slice.call( arguments ),
-			    defer = Promise.defer();
+			var args  = slice.call( arguments );
+			var defer = Promise.defer();
 
 			function callback( err, value ) {
 				if ( err ) {
