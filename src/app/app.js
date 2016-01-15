@@ -49,9 +49,11 @@ define(function( require ) {
 
 
 		// Models: github
-		GithubReleases: require( "models/github/Releases" ),
-		GithubReleasesAdapter: require( "store/GithubAdapter" ),
-		GithubReleasesSerializer: require( "models/github/ReleasesSerializer" ),
+		GithubRelease: require( "models/github/Release" ),
+		GithubReleaseAdapter: require( "store/GithubAdapter" ),
+		GithubReleaseSerializer: require( "models/github/ReleaseSerializer" ),
+		GithubReleaseAsset: require( "models/github/ReleaseAsset" ),
+		GithubReleaseAssetSerializer: require( "models/github/ReleaseAssetSerializer" ),
 
 
 		// Models: twitch

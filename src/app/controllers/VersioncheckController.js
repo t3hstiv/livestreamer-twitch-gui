@@ -99,7 +99,7 @@ define([
 		},
 
 		getReleases: function() {
-			get( this, "store" ).findAll( "githubReleases", { reload: true } )
+			get( this, "store" ).findAll( "githubRelease", { reload: true } )
 				.then(function( releases ) {
 					// filter records first
 					return releases.toArray().filter(function( release ) {
