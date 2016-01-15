@@ -1,10 +1,8 @@
 define(function() {
 
-	function progress( incomingMessage, callback ) {
+	function progress( incomingMessage, size, callback ) {
 		if ( !( callback instanceof Function ) ) { return; }
 
-		// it's fine to return NaN if the content-length header not available
-		var size = Number( incomingMessage.headers[ "content-length" ] );
 		var completed = 0;
 
 		incomingMessage.on( "data", function( chunk ) {

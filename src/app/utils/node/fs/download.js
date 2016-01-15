@@ -37,7 +37,9 @@ define([
 		getRedirected( url )
 			.then(function( incomingMessage ) {
 				// setup the progressCallback
-				progress( incomingMessage, progressCallback );
+				// it's fine to return NaN if the content-length header not available
+				var size = Number( incomingMessage.headers[ "content-length" ] );
+				progress( incomingMessage, size, progressCallback );
 
 				incomingMessage.pipe( writeStream, { end: true } );
 				incomingMessage.once( "error", reject );
