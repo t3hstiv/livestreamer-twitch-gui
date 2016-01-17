@@ -1,0 +1,93 @@
+
+progress {
+	-webkit-appearance: none;
+	position: relative;
+	display: block;
+	width: 100%;
+	height: .5rem;
+	margin: 0 auto 2em;
+
+	&::-webkit-progress-value {
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		display: block;
+	}
+
+	&[value] {
+		&::-webkit-progress-value {
+			transition: width .1s ease-out;
+		}
+	}
+
+	&:not([value]) {
+		// why doesn't blink allow custom animations of indetermined progress bars?
+		&::-webkit-progress-bar,
+		&::-webkit-progress-value {
+			display: none;
+		}
+
+		// create our own bars instead :P
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			display: block;
+		}
+
+		&::before {
+			-webkit-animation: animProgressIndeterminate1 2s linear infinite;
+		}
+		&::after {
+			-webkit-animation: animProgressIndeterminate2 2s linear infinite;
+		}
+
+		// use google material design animations
+		// github.com/google/material-design-lite/blob/v1.0.6/src/progress/_progress.scss#L83-L115
+		@-webkit-keyframes animProgressIndeterminate1 {
+			0% {
+				left: 0;
+				width: 0;
+			}
+			50% {
+				left: 25%;
+				width: 75%;
+			}
+			75% {
+				left: 100%;
+				width: 0;
+			}
+		}
+
+		@-webkit-keyframes animProgressIndeterminate2 {
+			0%, 50% {
+				left: 0;
+				width: 0;
+			}
+			75% {
+				left: 0;
+				width: 25%;
+			}
+			100% {
+				left: 100%;
+				width: 0;
+			}
+		}
+	}
+
+	.themed({
+		&::-webkit-progress-bar {
+			background: @themed-progress-bar-background;
+		}
+
+		&::-webkit-progress-value,
+		&:not([value])::before,
+		&:not([value])::after {
+			background: @themed-progress-value-background;
+		}
+	});
+}
