@@ -20,9 +20,9 @@ define([
 
 		// check again in x days (time in ms)
 		time: function() {
-			var days = Number( get( this, "config.version-check-days" ) );
+			var days = Number( get( this, "config.releases.checkdays" ) );
 			return 1000 * 3600 * 24 * days;
-		}.property( "config.version-check-days" ),
+		}.property( "config.releases.checkdays" ),
 
 
 		model: null,
@@ -148,7 +148,7 @@ define([
 
 			"showChangelog": function( success ) {
 				var version = get( this, "version" );
-				var url = get( this, "config.changelog-url" );
+				var url = get( this, "config.releases.changelog" );
 				if ( url ) {
 					url = url.replace( "{version}", version );
 					this.send( "openBrowser", url );

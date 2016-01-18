@@ -23,8 +23,9 @@ module.exports = {
 			// build dmg image
 			"cd ../../../..",
 			"appdmg build/package/osx32dmg/appdmg.json "
-				+ "\"dist/Install <%= package.config['display-name'] %> "
-				+ "v<%= package.version %> osx32.dmg\"",
+				+ "\"dist/Install <%= package.config['display-name'] %>"
+				+ " v<%= package.version %>"
+				+ " <%= package.config.releases.platforms.darwin.ia32 %>.dmg\"",
 			// undo rename
 			"cd build/releases/<%= package.name %>/osx32",
 			"mv \"<%= package.config['display-name'] %>.app\" <%= package.name %>.app"
@@ -40,8 +41,9 @@ module.exports = {
 			// build dmg image
 			"cd ../../../..",
 			"appdmg build/package/osx64dmg/appdmg.json "
-				+ "\"dist/Install <%= package.config['display-name'] %> "
-				+ "v<%= package.version %> osx64.dmg\"",
+				+ "\"dist/Install <%= package.config['display-name'] %>"
+				+ " v<%= package.version %>"
+				+ " <%= package.config.releases.platforms.darwin.x64 %>.dmg\"",
 			// undo rename
 			"cd build/releases/<%= package.name %>/osx64",
 			"mv \"<%= package.config['display-name'] %>.app\" <%= package.name %>.app"

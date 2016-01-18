@@ -27,7 +27,7 @@ module.exports = {
 				"version"    : "<%= package.version %>",
 				"author"     : "<%= package.author %>",
 				"homepage"   : "<%= package.homepage %>",
-				"arch"       : "win32"
+				"arch"       : "<%= package.config.releases.platforms.win32.ia32 %>"
 			}
 		},
 		"files": {
@@ -44,7 +44,7 @@ module.exports = {
 				"version"    : "<%= package.version %>",
 				"author"     : "<%= package.author %>",
 				"homepage"   : "<%= package.homepage %>",
-				"arch"       : "win64"
+				"arch"       : "<%= package.config.releases.platforms.win32.x64 %>"
 			}
 		},
 		"files": {
