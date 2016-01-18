@@ -14,7 +14,7 @@ define( [ "Ember" ], function( Ember ) {
 	return Ember.Helper.extend({
 		compute: function( params ) {
 			var size = Number( params[0] );
-			if ( !params[0] || isNaN( size ) || size < 0 ) { return "?"; }
+			if ( !params[0] || isNaN( size ) || size < 0 || size === Infinity ) { return "?"; }
 			if ( size === 0 ) { return "0 Bytes"; }
 
 			var obj = units.find(function( item ) {
