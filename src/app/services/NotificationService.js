@@ -2,20 +2,18 @@ define([
 	"Ember",
 	"nwjs/nwWindow",
 	"mixins/ChannelSettingsMixin",
+	"utils/node/platform",
 	"utils/node/fs/mkdirp",
 	"utils/node/fs/download",
-	"utils/node/fs/clearfolder",
-	"commonjs!path",
-	"commonjs!os"
+	"utils/node/fs/clearfolder"
 ], function(
 	Ember,
 	nwWindow,
 	ChannelSettingsMixin,
+	platform,
 	mkdirp,
 	download,
-	clearfolder,
-	PATH,
-	OS
+	clearfolder
 ) {
 
 	var get = Ember.get;
@@ -44,8 +42,8 @@ define([
 
 		// cache related properties
 		cacheDir: function() {
-			var dir = get( this, "config.notification-cache-dir" );
-			return PATH.resolve( dir.replace( "{os-tmpdir}", OS.tmpdir() ) );
+			var dir = get( this, "config.tempdir.notification" );
+			return platform.tmpdir( dir );
 		}.property( "config.notification-cache-dir" ),
 		cacheTime: function() {
 			var days = get( this, "config.notification-cache-time" );

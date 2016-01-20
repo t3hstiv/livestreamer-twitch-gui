@@ -54,6 +54,10 @@
 				}
 			}
 		},
+		"tempdir": {
+			"root": "livestreamer-twitch-gui",
+			"notification": "icon-cache"
+		},
 		"tray-icon": "img/icon-16{hidpi}.png",
 		"tray-icon-osx": "img/icon-osx-18{hidpi}.png",
 		"themes": [
@@ -116,7 +120,6 @@
 			"zh-cn": { "flag": "cn", "lang": "chinese" },
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
-		"notification-cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
 		"notification-cache-time": 7,
 		"notification-retries": 3,
 		"notification-interval": 60000,
