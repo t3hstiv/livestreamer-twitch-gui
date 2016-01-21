@@ -19,41 +19,45 @@ define([
 ) {
 
 	function downloadPromise( url, writeStream, progressCallback ) {
-		var defer = Promise.defer();
+		return getRedirected( url ).then(function( incomingMessage ) {
+			var defer = Promise.defer();
 
-		function resolve() {
-			writeStream.end();
-			defer.resolve();
-		}
+			writeStream.once( "error", defer.reject );
 
-		function reject( err ) {
-			writeStream.end();
-			defer.reject( err );
-		}
+			incomingMessage.once( "error", defer.reject );
+			incomingMessage.once( "end",   defer.resolve );
 
-		writeStream.once( "error", reject );
+			incomingMessage.on( "unpipe", function() {
+				defer.reject( new Error( "I/O error" ) );
+			});
 
-		// start the download
-		getRedirected( url )
-			.then(function( incomingMessage ) {
-				// setup the progressCallback
-				// it's fine to return NaN if the content-length header not available
-				var size = Number( incomingMessage.headers[ "content-length" ] );
-				progress( incomingMessage, size, progressCallback );
+			// setup the progressCallback
+			// it's fine to return NaN if the content-length header not available
+			var size = Number( incomingMessage.headers[ "content-length" ] );
+			progress( incomingMessage, size, progressCallback );
 
-				incomingMessage.pipe( writeStream, { end: true } );
-				incomingMessage.once( "error", reject );
-				incomingMessage.once( "end",   resolve );
+			// link readStream and writeStream
+			incomingMessage.pipe( writeStream, { end: true } );
 
-				incomingMessage.on( "unpipe", function() {
-					// stop download in case the writeStream was closed
+			// the completion promise
+			var promise = defer.promise
+				.then( function() {
+					writeStream.end();
+					return writeStream;
+				}, function( err ) {
+					// stop the download in case of any error
 					incomingMessage.destroy();
-					reject( new Error( "I/O error" ) );
+					writeStream.end();
+					return Promise.reject( err );
 				});
-			})
-			.catch( reject );
 
-		return defer.promise;
+			return {
+				promise    : promise,
+				readStream : incomingMessage,
+				writeStream: writeStream,
+				path       : writeStream.path
+			};
+		});
 	}
 
 
@@ -81,9 +85,7 @@ define([
 		if ( dest === null ) {
 			var stream = new WritableMemoryStream();
 
-			return downloadPromise( parsedURL, stream, progressCallback ).then(function() {
-				return stream;
-			});
+			return downloadPromise( parsedURL, stream, progressCallback );
 
 		} else if ( typeof dest === "string" ) {
 			dest = {
@@ -108,9 +110,7 @@ define([
 				var path   = PATH.join( dest.dir, name );
 				var stream = new FS.WriteStream( path );
 
-				return downloadPromise( url, stream, progressCallback ).then(function() {
-					return path;
-				});
+				return downloadPromise( url, stream, progressCallback );
 			});
 	}
 

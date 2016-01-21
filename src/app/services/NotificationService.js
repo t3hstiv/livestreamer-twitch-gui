@@ -331,11 +331,13 @@ define([
 						return Promise.all( streams.map(function( stream ) {
 							var logo = get( stream, "channel.logo" );
 							return download( logo, iconTempDir )
-								.then(function( file ) {
-									// the channel logo is now the local file
-									file = "file://" + file;
-									set( stream, "logo", file );
-									return stream;
+								.then(function( downloadObj ) {
+									return downloadObj.promise.then(function() {
+										// the channel logo is now the local file
+										var file = "file://" + downloadObj.path;
+										set( stream, "logo", file );
+										return stream;
+									});
 								});
 						}) );
 					})
