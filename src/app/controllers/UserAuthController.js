@@ -23,12 +23,12 @@ define([
 		token: "",
 
 		scope: function() {
-			return get( this, "auth.scope" ).join( ", " );
-		}.property( "auth.scope" ),
+			return get( this, "auth.oauth.scope" ).join( ", " );
+		}.property( "auth.oauth.scope" ),
 
 		/**
 		 * 0 000: start
-		 * 1 001: auth  - login (window opened)
+		 * 1 001: auth  - login (server started)
 		 * 2 010: auth  - failure
 		 * 3 011: auth  - success (not used)
 		 * 4 100: token - show form
@@ -47,8 +47,8 @@ define([
 		}.property( "userStatus" ),
 
 		isLoggingIn: function() {
-			return get( this, "userStatus" ) === 1;
-		}.property( "userStatus" ),
+			return get( this, "loginStatus" ) === 1;
+		}.property( "loginStatus" ),
 
 		hasLoginResult: function() {
 			var userStatus = get( this, "userStatus" );
@@ -64,10 +64,10 @@ define([
 		}.property( "loginStatus" ),
 
 
-		windowObserver: function() {
-			var authWindow = get( this, "auth.window" );
-			set( this, "loginStatus", authWindow ? 1 : 0 );
-		}.observes( "auth.window" ),
+		serverObserver: function() {
+			var authServer = get( this, "auth.server" );
+			set( this, "loginStatus", authServer ? 1 : 0 );
+		}.observes( "auth.server" ),
 
 
 		resetProperties: function() {
@@ -134,6 +134,11 @@ define([
 							self.retryTransition();
 						}
 					});
+			},
+
+			// abort sign in with username + password
+			"abort": function() {
+				get( this, "auth" ).abortSignin();
 			}
 		}
 	});

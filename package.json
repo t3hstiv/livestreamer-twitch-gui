@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.11.1",
+	"version": "0.12.0",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -79,17 +79,22 @@
 		"twitch-subscribe-url": "http://www.twitch.tv/{channel}/subscribe",
 		"twitch-subscribe-edit": "http://www.twitch.tv/products/{channel}/ticket/edit",
 		"twitch-subscribe-cancel": "http://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true",
-		"twitch-oauth-base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
-		"twitch-oauth-client-id": "phiay4sq36lfv9zu7cbqwz2ndnesfd8",
-		"twitch-oauth-redirect-uri": "app://livestreamer-twitch-gui/oauth.html",
-		"twitch-oauth-scope": [
-			"user_read",
-			"user_blocks_read",
-			"user_blocks_edit",
-			"user_follows_edit",
-			"user_subscriptions",
-			"chat_login"
-		],
+		"twitch-oauth": {
+			"server-port": 65432,
+			"base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
+			"client-id": "phiay4sq36lfv9zu7cbqwz2ndnesfd8",
+			"redirect-uri": "http://localhost:{server-port}/redirect",
+			"scope": [
+				"user_read",
+				"user_blocks_read",
+				"user_blocks_edit",
+				"user_follows_edit",
+				"user_subscriptions",
+				"chat_login"
+			]
+		},
+		"search-history-size": 50,
+		"enable-smoothscroll": true,
 		"image-expiration-time": 60,
 		"language_codes": {
 			"cs":    { "flag": "cz", "lang": "czech" },
@@ -121,7 +126,8 @@
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
 		"notification-cache-time": 7,
-		"notification-retries": 3,
+		"notification-max-fails-requests": 3,
+		"notification-max-fails-channels": 1,
 		"notification-interval": 60000,
 		"notification-interval-retry": 1000,
 		"notification-interval-error": 120000,
@@ -192,6 +198,7 @@
 			"chatty": {
 				"args": "-jar \"{chatty}\"",
 				"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
+				"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
 				"chatty-fallback": "chatty",
 				"exec": {
 					"win32": "javaw",

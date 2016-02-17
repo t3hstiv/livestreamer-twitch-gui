@@ -113,6 +113,7 @@ define(function( require ) {
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
 		LinkComponent: require( "components/LinkComponent" ),
+		TextFieldComponent: require( "components/TextFieldComponent" ),
 
 
 		// Helpers
@@ -140,6 +141,9 @@ define(function( require ) {
 		MetadataService: require( "services/MetadataService" ),
 		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
+		ModalService: require( "services/ModalService" ),
+		VersioncheckService: require( "services/VersioncheckService" ),
+		LivestreamerService: require( "services/LivestreamerService" ),
 		NotificationService: require( "services/NotificationService" ),
 		ChatService: require( "services/ChatService" ),
 
@@ -158,22 +162,18 @@ define(function( require ) {
 
 		IndexRoute: require( "routes/IndexRoute" ),
 
-		VersioncheckController: require( "controllers/VersioncheckController" ),
-		LivestreamerController: require( "controllers/LivestreamerController" ),
-
 
 		// Modal Dialogs
-		ModalDialogComponent: require( "components/ModalDialogComponent" ),
 		ModalHeaderComponent: require( "components/ModalHeaderComponent" ),
 		ModalBodyComponent: require( "components/ModalBodyComponent" ),
 		ModalFooterComponent: require( "components/ModalFooterComponent" ),
 
-		ModalFirstrunTemplate: require( "hbs!templates/modal/ModalFirstrun" ),
-		ModalChangelogTemplate: require( "hbs!templates/modal/ModalChangelog" ),
-		ModalNewreleaseTemplate: require( "hbs!templates/modal/ModalNewrelease" ),
-		ModalSettingsTemplate: require( "hbs!templates/modal/ModalSettings" ),
-		ModalLivestreamerTemplate: require( "hbs!templates/modal/ModalLivestreamer" ),
-		ModalQuitTemplate: require( "hbs!templates/modal/ModalQuit" ),
+		ModalQuitComponent: require( "components/modal/ModalQuitComponent" ),
+		ModalFirstrunComponent: require( "components/modal/ModalFirstrunComponent" ),
+		ModalChangelogComponent: require( "components/modal/ModalChangelogComponent" ),
+		ModalNewreleaseComponent: require( "components/modal/ModalNewreleaseComponent" ),
+		ModalConfirmComponent: require( "components/modal/ModalConfirmComponent" ),
+		ModalLivestreamerComponent: require( "components/modal/ModalLivestreamerComponent" ),
 
 
 		// Components
@@ -213,6 +213,7 @@ define(function( require ) {
 		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
 		ChannelPanelsComponent: require( "components/ChannelPanelsComponent" ),
 		PanelItemComponent: require( "components/PanelItemComponent" ),
+		SelectableTextComponent: require( "components/SelectableTextComponent" ),
 
 
 		// Content

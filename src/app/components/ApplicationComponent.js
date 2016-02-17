@@ -1,9 +1,15 @@
 define([
 	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
+	"utils/node/platform",
 	"gui/selectable",
 	"gui/smoothscroll"
 ], function(
 	Ember,
+	nwGui,
+	nwWindow,
+	platform,
 	guiSelectable,
 	guiSmoothscroll
 ) {
@@ -45,18 +51,52 @@ define([
 
 		didInsertElement: function() {
 			guiSelectable();
-			guiSmoothscroll();
+
+			var enableSmoothscroll = get( this, "metadata.config.enable-smoothscroll" );
+			if ( enableSmoothscroll ) {
+				guiSmoothscroll();
+			}
 
 			var controller = this.container.lookup( "controller:application" );
 
 			document.documentElement.addEventListener( "keyup", function( e ) {
 				var f5    = e.keyCode === 116;
 				var ctrlR = e.keyCode ===  82 && e.ctrlKey === true;
-				var metaR = e.keyCode ===  82 && e.metaKey === true;
-				if ( f5 || ctrlR || metaR ) {
+				if ( f5 || ctrlR ) {
 					controller.send( "refresh" );
 				}
 			}, false );
+
+
+			// Fix not being able to refresh on OSX by pressing CMD+R. See #203
+			// NW.js < 0.13.0: Ctrl===Command
+			// Register a global hotkey and only refresh if the window is currently focused
+			var shortcut;
+
+			function unregisterHotkey() {
+				if ( !shortcut ) { return; }
+				nwGui.App.unregisterGlobalHotKey( shortcut );
+				shortcut = null;
+			}
+
+			function registerHotkey() {
+				unregisterHotkey();
+				shortcut = new nwGui.Shortcut({
+					key: "Ctrl+R",
+					active: function() {
+						if ( !nwWindow.isFocused() ) { return; }
+						controller.send( "refresh" );
+					},
+					failed: function() {}
+				});
+				nwGui.App.registerGlobalHotKey( shortcut );
+			}
+
+			if ( platform.isDarwin ) {
+				nwWindow.on( "focus",    registerHotkey );
+				nwWindow.on( "blur",     unregisterHotkey );
+				nwWindow.on( "shutdown", unregisterHotkey );
+			}
 		}
 	});
 

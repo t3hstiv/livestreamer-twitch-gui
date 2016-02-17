@@ -1,6 +1,31 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## [v0.12.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
+
+- Re-implemented the authentication system. #209
+- Improved desktop notification failure detection.
+- Fixed OSX cmd+r refresh shortcut. #203
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.2...v0.12.0)
+
+
+## [v0.11.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.2) (2016-01-23)
+
+- Implemented right click context menus. #180
+- Implemented additional stream click actions. #180
+- Implemented automatic menu refresh on focus regain. #177
+- Reworked error handling of desktop notifications. #176
+- Added "Audio only" stream quality. #195
+- Added always show game option to settings. #178
+- Added option for disabling Windows8+ startmenu shortcut creation. #173
+- Fixed not being able to refresh menus that failed to load. #189
+- Fixed bug causing scrolling to stop working. #196
+- Fixed blurry application icon on Linux.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...v0.11.2)
+
+
 ## [v0.11.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
 
 - Implemented channel details.

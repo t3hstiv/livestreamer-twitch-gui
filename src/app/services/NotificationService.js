@@ -22,20 +22,44 @@ define([
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
 	var cancel = Ember.run.cancel;
+	var debounce = Ember.run.debounce;
 	var later = Ember.run.later;
 
 	var Notif = window.Notification;
 
 
+	function StreamCache( stream ) {
+		this.id    = get( stream, "channel.id" );
+		this.since = get( stream, "created_at" );
+		this.fails = 0;
+	}
+
+	StreamCache.prototype.findStreamIndex = function( streams ) {
+		for ( var id = this.id, i = 0, l = streams.length; i < l; i++ ) {
+			if ( get( streams[ i ], "channel.id" ) === id ) {
+				return i;
+			}
+		}
+
+		return -1;
+	};
+
+	StreamCache.prototype.isNotNewer = function( stream ) {
+		return this.since >= get( stream, "created_at" );
+	};
+
+
 	return Ember.Service.extend( ChannelSettingsMixin, {
-		metadata: Ember.inject.service(),
-		store   : Ember.inject.service(),
-		settings: Ember.inject.service(),
-		auth    : Ember.inject.service(),
+		metadata    : Ember.inject.service(),
+		store       : Ember.inject.service(),
+		settings    : Ember.inject.service(),
+		auth        : Ember.inject.service(),
+		livestreamer: Ember.inject.service(),
 
 		config  : alias( "metadata.config" ),
 
-		retries      : alias( "config.notification-retries" ),
+		failsRequests: alias( "config.notification-max-fails-requests" ),
+		failsChannels: alias( "config.notification-max-fails-channels" ),
 		interval     : alias( "config.notification-interval" ),
 		intervalRetry: alias( "config.notification-interval-retry" ),
 		intervalError: alias( "config.notification-interval-error" ),
@@ -56,9 +80,8 @@ define([
 		}.property( "config.tray-icon" ),
 
 		// controller state
-		model : {},
+		model : [],
 		_first: true,
-		_fails: 0,
 		_tries: 0,
 		_next : null,
 		_error: false,
@@ -111,32 +134,34 @@ define([
 				if ( !get( self, "running" ) ) { return; }
 				if ( type !== follows ) { return; }
 
-				var name = snapshot.id;
+				var id = snapshot.id;
 				// is the followed channel online?
-				store.findRecord( "twitchStream", name, { reload: true } )
-					.then(function() {
-						/** @type {Object} model */
+				store.findRecord( "twitchStream", id, { reload: true } )
+					.then(function( stream ) {
 						var model = get( self, "model" );
-						if ( model.hasOwnProperty( name ) ) { return; }
-						model[ name ] = new Date();
+						if ( model.findBy( "id", id ) ) { return; }
+						model.push( new StreamCache( stream ) );
 					});
 			});
 		}.on( "init" ),
 
 
-		_windowBadgeLabel: function() {
+		_setWindowBadgeLabel: function() {
 			var label;
 			if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 				label = "";
 
 			} else {
-				var model = get( this, "model" );
-				var num   = Object.keys( model ).length;
+				var num = get( this, "model.length" );
 				label = String( num );
 			}
 			// update badge label or remove it
 			nwWindow.setBadgeLabel( label );
-		}.observes( "running", "settings.notify_badgelabel", "model" ),
+		},
+
+		_windowBadgeLabelObserver: function() {
+			debounce( this, "_setWindowBadgeLabel", 500 );
+		}.observes( "running", "settings.notify_badgelabel", "model.[]" ),
 
 
 		_setupTrayItem: function() {
@@ -179,9 +204,8 @@ define([
 			}
 
 			setProperties( this, {
-				model : {},
+				model : [],
 				_first: true,
-				_fails: 0,
 				_tries: 0,
 				_error: false,
 				_next : null
@@ -228,7 +252,7 @@ define([
 
 		failure: function() {
 			var tries = get( this, "_tries" );
-			var max   = get( this, "retries" );
+			var max   = get( this, "failsRequests" );
 			var interval;
 
 			// did we reach the retry limit yet?
@@ -251,39 +275,57 @@ define([
 		},
 
 		queryCallback: function( streams ) {
-			/** @type {Object} model */
-			var model, newStreams;
+			var model = get( this, "model" );
+			var max   = get( this, "failsChannels" );
 
-			// just fill the cache on the first run
-			if ( !get( this, "_first" ) ) {
-				// check for failed queries (empty record arrays), but not twice in a row
-				if (
-					   get( streams, "length" ) === 0
-					&& this.incrementProperty( "_fails" ) < 2
-				) {
-					// don't update the model and just return an empty array
-					return [];
+			// figure out which streams are new
+			for ( var item, idx, i = 0, l = model.length; i < l; i++ ) {
+				item = model[ i ];
+
+				// "indexOfBy"
+				// streams are ordered, so most of the time the first item matches
+				idx = item.findStreamIndex( streams );
+
+				if ( idx !== -1 ) {
+					// existing stream found:
+					// has the stream still the same creation date?
+					if ( item.isNotNewer( streams[ idx ] ) ) {
+						// stream hasn't changed:
+						// remove stream from record array
+						streams.removeAt( idx, 1 );
+						// reset fails counter
+						item.fails = 0;
+						// keep the item (is not new)
+						continue;
+					}
+
+				} else {
+					// stream not found (may be offline):
+					// increase fails counter
+					if ( ++item.fails <= max ) {
+						// keep the item (has not reached failure limit yet)
+						continue;
+					}
 				}
-				set( this, "_fails", 0 );
 
-				// get a list of all new streams by comparing the cached streams
-				model = get( this, "model" );
-				newStreams = streams.filter(function( stream ) {
-					var name  = get( stream, "channel.id" );
-					var since = get( stream, "created_at" );
-					return name && ( !model.hasOwnProperty( name ) || model[ name ] < since );
-				});
+				// remove item from the model array
+				model.removeAt( i, 1 );
+				--i;
+				--l;
 			}
-			set( this, "_first", false );
 
-			// update cache
-			model = streams.reduce(function( obj, stream ) {
-				obj[ get( stream, "channel.id" ) ] = get( stream, "created_at" );
-				return obj;
-			}, {} );
-			set( this, "model", model );
+			// add new streams afterwards
+			model.pushObjects( streams.map(function( stream ) {
+				return new StreamCache( stream );
+			}) );
 
-			return newStreams || [];
+			// just fill the cache and return an empty array of new streams on the first run
+			if ( get( this, "_first" ) ) {
+				set( this, "_first", false );
+				return [];
+			}
+
+			return streams;
 		},
 
 
@@ -382,22 +424,29 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
-			// FIXME: refactor global openLivestreamer and openBrowser actions
+			// FIXME: refactor global openBrowser actions
 			var applicationController = this.container.lookup( "controller:application" );
 
 			switch( settings ) {
+				// followed streams menu
 				case 1:
 					applicationController.send( "goto", "user.followedStreams" );
 					break;
+				// launch stream
 				case 2:
-					applicationController.send( "openLivestreamer", stream );
+					get( this, "livestreamer" ).startStream( stream );
 					break;
+				// launch stream + chat
 				case 3:
-					var url = get( this, "config.twitch-chat-url" )
-						.replace( "{channel}", get( stream, "channel.id" ) );
-					applicationController.send( "openLivestreamer", stream );
+					get( this, "livestreamer" ).startStream( stream );
+					// don't open the chat twice
 					if ( !get( this, "settings.gui_openchat" ) ) {
-						applicationController.send( "openBrowser", url );
+						var url = get( this, "config.twitch-chat-url" );
+						var channel = get( stream, "channel.id" );
+						if ( url && channel ) {
+							url = url.replace( "{channel}", channel );
+							applicationController.send( "openBrowser", url );
+						}
 					}
 			}
 		},
