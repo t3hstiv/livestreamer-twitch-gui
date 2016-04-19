@@ -17,7 +17,7 @@ Please read the following guidelines before you [report an issue][issues]:
 
 Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs.
 
-Using the [issue template](ISSUE_TEMPLATE.md) when reporting an issue is appreciated.
+Using the [issue template][issue-template] when reporting an issue is appreciated.
 
 
 ## Feature requests
@@ -116,6 +116,7 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
 
   [license]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE
   [issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues
+  [issue-template]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/ISSUE_TEMPLATE.md
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
