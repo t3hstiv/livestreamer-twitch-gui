@@ -15,9 +15,7 @@ Please read the following guidelines before you [report an issue][issues]:
 
 3. **Isolate the demonstrable problem** — make sure that the code in the project's repository is *definitely* responsible for the issue.
 
-Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs.
-
-Consider using the [issue template][issue-template] when reporting an issue.
+Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs. You can also consider using the [issue template][issue-template] when reporting an issue.
 
 
 ## Feature requests
