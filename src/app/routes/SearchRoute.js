@@ -1,10 +1,14 @@
 define([
 	"Ember",
 	"mixins/InfiniteScrollMixin",
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
 	"utils/preload"
 ], function(
 	Ember,
 	InfiniteScrollMixin,
+	toArray,
+	mapBy,
 	preload
 ) {
 
@@ -30,53 +34,43 @@ define([
 
 			var store = get( this, "store" );
 
-			return Promise.all([
+			return Ember.RSVP.hash({
 				// search for games
-				filterMatches( params.filter, "games" )
+				games: filterMatches( params.filter, "games" )
 					? store.query( "twitchSearchGame", {
 						query: params.query,
 						type : "suggest",
 						live : true
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "game" );
-						})
+						.then( toArray )
+						.then( mapBy( "game" ) )
 						.then( preload( "box.large_nocache" ) )
 					: Promise.resolve([]),
 
 				// search for channels
-				filterMatches( params.filter, "channels" )
+				channels: filterMatches( params.filter, "channels" )
 					? store.query( "twitchSearchChannel", {
 						query : params.query,
 						offset: 0,
 						limit : 10
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "channel" );
-						})
+						.then( toArray )
+						.then( mapBy( "channel" ) )
 						.then( preload( "logo" ) )
 					: Promise.resolve([]),
 
 				// search for streams
-				filterMatches( params.filter, "streams" )
+				streams: filterMatches( params.filter, "streams" )
 					? store.query( "twitchSearchStream", {
 						query : params.query,
 						offset: get( this, "offset" ),
 						limit : get( this, "limit" )
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "stream" );
-						})
+						.then( toArray )
+						.then( mapBy( "stream" ) )
 						.then( preload( "preview.medium_nocache" ) )
 					: Promise.resolve([])
-			])
-				.then(function( queries ) {
-					return {
-						games   : queries[0],
-						channels: queries[1],
-						streams : queries[2]
-					};
-				});
+			});
 		},
 
 		fetchContent: function() {
@@ -89,7 +83,8 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.toArray().mapBy( "stream" ); })
+				.then( toArray )
+				.then( mapBy( "stream" ) )
 				.then( preload( "preview.medium_nocache" ) );
 		},
 

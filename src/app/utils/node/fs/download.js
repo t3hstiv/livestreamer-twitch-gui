@@ -1,6 +1,6 @@
 define([
-	"utils/fs/stat",
-	"utils/fs/mkdirp",
+	"utils/node/fs/stat",
+	"utils/node/fs/mkdirp",
 	"commonjs!path",
 	"commonjs!fs",
 	"commonjs!http",
@@ -14,15 +14,18 @@ define([
 	HTTPS
 ) {
 
-	var re_scheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
-
-	function isDirectory( stat ) {
-		return stat.isDirectory();
-	}
+	var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
 
-	return function download( url, dir, name ) {
-		var match = re_scheme.exec( url );
+	/**
+	 * Download a file via HTTP/HTTPS and save it to the filesystem
+	 * @param {String} url
+	 * @param {String} dir
+	 * @param {String?} name
+	 * @returns {Promise}
+	 */
+	function download( url, dir, name ) {
+		var match = reScheme.exec( url );
 		if ( !dir || !match || !match[2] ) { return Promise.reject(); }
 
 		// if name is not set, use the remote path as file name
@@ -33,13 +36,13 @@ define([
 			// file does not exist
 			.catch(function() {
 				// check if the directory exists
-				return stat( dir, isDirectory )
+				return stat( dir, stat.isDirectory )
 					// try to create directory
 					.catch( mkdirp.bind( null, dir ) )
 					// now start the download
 					.then(function() {
-						var defer = Promise.defer(),
-						    write = FS.createWriteStream( dest );
+						var defer = Promise.defer();
+						var write = FS.createWriteStream( dest );
 
 						write.on( "error", function() {
 							write.close( defer.reject );
@@ -56,6 +59,9 @@ define([
 						return defer.promise;
 					});
 			});
-	};
+	}
+
+
+	return download;
 
 });

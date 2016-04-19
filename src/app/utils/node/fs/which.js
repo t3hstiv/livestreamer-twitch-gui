@@ -1,6 +1,6 @@
 define([
-	"utils/fs/stat",
-	"utils/platform",
+	"utils/node/fs/stat",
+	"utils/node/platform",
 	"commonjs!path"
 ], function(
 	stat,
@@ -15,31 +15,32 @@ define([
 
 	/**
 	 * Locate a command
-	 * @param {string} file
-	 * @param {Function?} check
-	 * @returns {Promise}
+	 * @param {String} file
+	 * @param {Function?} callback
+	 * @returns {Promise<string>} The resolved promise will return the path
 	 */
-	return function which( file, check ) {
+	function which( file, callback ) {
 		// absolute or relative
 		if ( file.indexOf( sep ) !== -1 ) {
-			return stat( file, check );
+			return stat( file, callback );
 
 		// search in every PATHS + EXTS
 		} else {
-			/*
-			 * Start with a rejected promise and build a promise chain with catches.
-			 * The first resolving file check will jump to the end of the chain.
-			 */
+			// Start with a rejected promise and build a promise chain with catches.
+			// The first resolving file check will jump to the end of the chain.
 			return paths.reduce(function( chain, path ) {
 				return chain.catch(function() {
 					return exts.reduce(function( chain, ext ) {
 						return chain.catch(function() {
-							return stat( path + sep + file + ext, check );
+							return stat( path + sep + file + ext, callback );
 						});
 					}, chain );
 				});
 			}, Promise.reject() );
 		}
-	};
+	}
+
+
+	return which;
 
 });

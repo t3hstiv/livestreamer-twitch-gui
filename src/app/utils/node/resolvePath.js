@@ -1,5 +1,5 @@
 define([
-	"utils/platform",
+	"utils/node/platform",
 	"commonjs!path"
 ], function(
 	platform,
@@ -22,6 +22,7 @@ define([
 		path = path.replace( reVarUnix, fnVarReplace );
 		return PATH.resolve( path );
 	}
+
 
 	return platform.isWin
 		? resolvePathWindows

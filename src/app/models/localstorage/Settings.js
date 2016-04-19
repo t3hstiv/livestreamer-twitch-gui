@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"EmberData",
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	Ember,
 	DS,
@@ -20,6 +20,7 @@ define([
 			return obj;
 		}, {} );
 	}
+
 
 	return DS.Model.extend({
 		metadata: Ember.inject.service(),
@@ -60,6 +61,8 @@ define([
 		notify_shortcut     : attr( "boolean", { defaultValue: true } ),
 		hls_live_edge       : attr( "number",  { defaultValue: 3, minValue: 1, maxValue: 10 } ),
 		hls_segment_threads : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_open          : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_streams       : attr( "number",  { defaultValue: 1, minValue: 0, maxValue: 3 } ),
 		chat_method         : attr( "string",  { defaultValue: "default" } ),
 		chat_command        : attr( "string",  { defaultValue: "" } ),
 
@@ -77,7 +80,14 @@ define([
 
 		isVisibleInTray: function() {
 			return ( get( this, "gui_integration" ) & 2 ) > 0;
-		}.property( "gui_integration" )
+		}.property( "gui_integration" ),
+
+		playerParamsCorrected: function() {
+			var params = get( this, "player_params" );
+			return params.length && params.indexOf( "{filename}" ) === -1
+				? params + " {filename}"
+				: params;
+		}.property( "player_params" )
 
 	}).reopenClass({
 

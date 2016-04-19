@@ -1,16 +1,17 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"nwjs/openBrowser",
 	"components/button/FormButtonComponent"
 ], function(
 	Ember,
-	nwGui,
+	openBrowser,
 	FormButtonComponent
 ) {
 
 	var get = Ember.get;
 	var and = Ember.computed.and;
 	var or = Ember.computed.or;
+
 
 	return FormButtonComponent.extend({
 		metadata: Ember.inject.service(),
@@ -34,7 +35,7 @@ define([
 
 				if ( url && channel ) {
 					url = url.replace( "{channel}", channel );
-					nwGui.Shell.openExternal( url );
+					openBrowser( url );
 					success();
 
 				} else {

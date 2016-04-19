@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"mixins/RetryTransitionMixin",
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	Ember,
 	RetryTransitionMixin,
@@ -19,6 +19,7 @@ define([
 		}.property( "settings.content" );
 	}
 
+
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
@@ -33,6 +34,14 @@ define([
 		hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
+
+		retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
+		retryStreamsMin    : settingsAttrMeta( "retry_streams", "minValue" ),
+		retryStreamsMax    : settingsAttrMeta( "retry_streams", "maxValue" ),
+
+		retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
+		retryOpenMin    : settingsAttrMeta( "retry_open", "minValue" ),
+		retryOpenMax    : settingsAttrMeta( "retry_open", "maxValue" ),
 
 		chatMethods: function() {
 			var methods = get( this, "settings.content.constructor.chat_methods" );
@@ -82,10 +91,10 @@ define([
 		}.property(),
 
 		minimize_observer: function() {
-			var int    = get( this, "model.gui_integration" ),
-			    min    = get( this, "model.gui_minimize" ),
-			    noTask = ( int & 1 ) === 0,
-			    noTray = ( int & 2 ) === 0;
+			var int    = get( this, "model.gui_integration" );
+			var min    = get( this, "model.gui_minimize" );
+			var noTask = ( int & 1 ) === 0;
+			var noTray = ( int & 2 ) === 0;
 
 			// make sure that disabled options are not selected
 			if ( noTask && min === 1 ) {
@@ -122,7 +131,7 @@ define([
 				model.setProperties( buffer );
 				model.save()
 					.then( success, failure )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
@@ -132,13 +141,13 @@ define([
 				get( this, "model" ).discardChanges();
 				Promise.resolve()
 					.then( success )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) );
 			},
 
 			"cancel": function() {
 				set( this, "previousTransition", null );
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			},
 
 			"togglePlayerCmdSubstitutions": function() {

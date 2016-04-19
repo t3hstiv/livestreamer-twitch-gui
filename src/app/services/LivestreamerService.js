@@ -4,11 +4,11 @@ define([
 	"nwjs/nwWindow",
 	"models/localstorage/Settings",
 	"mixins/ChannelSettingsMixin",
-	"utils/fs/which",
-	"utils/fs/stat",
-	"utils/StreamOutputBuffer",
 	"utils/semver",
-	"utils/platform",
+	"utils/StreamOutputBuffer",
+	"utils/node/platform",
+	"utils/node/fs/stat",
+	"utils/node/fs/which",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
@@ -17,11 +17,11 @@ define([
 	nwWindow,
 	Settings,
 	ChannelSettingsMixin,
-	which,
-	stat,
-	StreamOutputBuffer,
 	semver,
+	StreamOutputBuffer,
 	platform,
+	stat,
+	which,
 	CP,
 	PATH
 ) {
@@ -60,12 +60,6 @@ define([
 
 	function Warning( message ) { this.message = message; }
 	Warning.prototype = merge( new Error(), { name: "Warning" } );
-
-
-	function execCheck( stat ) {
-		// octal: 0111
-		return isWin || ( stat.mode & 73 ) > 0;
-	}
 
 
 	// we need a common error parsing function for stdout and stderr, because
@@ -171,7 +165,7 @@ define([
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// automatically open chat
@@ -196,7 +190,7 @@ define([
 				   !get( livestreamer, "error" )
 				&& get( this, "active" ) === livestreamer
 			) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// restore the GUI
@@ -210,6 +204,15 @@ define([
 			if ( !get( livestreamer, "isDeleted" ) ) {
 				livestreamer.destroyRecord();
 			}
+		},
+
+
+		closeStream: function( stream ) {
+			var model = get( this, "model" );
+			var livestreamer = model.findBy( "stream", stream );
+			if ( !livestreamer ) { return false; }
+			livestreamer.kill();
+			return true;
 		},
 
 
@@ -236,7 +239,7 @@ define([
 			}
 
 			// check for the executable
-			return which( livestreamer, execCheck )
+			return which( livestreamer, stat.isExecutable )
 				// check fallback paths
 				.catch(function() {
 					var promise = Promise.reject();
@@ -248,7 +251,7 @@ define([
 					return fb.reduce(function( promise, path ) {
 						var check = PATH.join( PATH.resolve( path ), exec );
 						return promise.catch(function() {
-							return stat( check, execCheck );
+							return stat( check, stat.isExecutable );
 						});
 					}, promise );
 				}.bind( this ) )

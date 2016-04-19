@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.12.0",
+	"version": "0.13.0",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -43,6 +43,7 @@
 			"default",
 			"dark"
 		],
+		"tempdir": "livestreamer-twitch-gui",
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-fallback-paths-unix": [
 			"/usr/local/bin",
@@ -54,11 +55,11 @@
 		"livestreamer-docs-url": "http://docs.livestreamer.io/en/latest/cli.html#cmdoption{cmd}",
 		"changelog-url": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}",
 		"twitch-stream-url": "twitch.tv/{channel}",
-		"twitch-chat-url": "http://www.twitch.tv/{channel}/chat",
+		"twitch-chat-url": "https://www.twitch.tv/{channel}/chat",
 		"twitch-emotes-url": "https://twitchemotes.com/channel/{channel}",
-		"twitch-subscribe-url": "http://www.twitch.tv/{channel}/subscribe",
-		"twitch-subscribe-edit": "http://www.twitch.tv/products/{channel}/ticket/edit",
-		"twitch-subscribe-cancel": "http://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true",
+		"twitch-subscribe-url": "https://www.twitch.tv/{channel}/subscribe",
+		"twitch-subscribe-edit": "https://www.twitch.tv/products/{channel}/ticket/edit",
+		"twitch-subscribe-cancel": "https://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true",
 		"twitch-oauth": {
 			"server-port": 65432,
 			"base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
@@ -104,13 +105,15 @@
 			"zh-cn": { "flag": "cn", "lang": "chinese" },
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
-		"notification-cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
-		"notification-cache-time": 7,
-		"notification-max-fails-requests": 3,
-		"notification-max-fails-channels": 1,
-		"notification-interval": 60000,
-		"notification-interval-retry": 1000,
-		"notification-interval-error": 120000,
+		"notification": {
+			"cache-dir": "icon-cache",
+			"cache-time": 7,
+			"max-fails-requests": 3,
+			"max-fails-channels": 1,
+			"interval": 60000,
+			"interval-retry": 1000,
+			"interval-error": 120000
+		},
 		"windows-shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs",
 		"stream-reload-interval": 60000,
 		"random-max": 500,

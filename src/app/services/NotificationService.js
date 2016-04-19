@@ -1,21 +1,25 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
+	"nwjs/openBrowser",
 	"mixins/ChannelSettingsMixin",
-	"utils/fs/mkdirp",
-	"utils/fs/download",
-	"utils/fs/clearfolder",
-	"commonjs!path",
-	"commonjs!os"
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
+	"utils/node/platform",
+	"utils/node/fs/mkdirp",
+	"utils/node/fs/download",
+	"utils/node/fs/clearfolder"
 ], function(
 	Ember,
 	nwWindow,
+	openBrowser,
 	ChannelSettingsMixin,
+	toArray,
+	mapBy,
+	platform,
 	mkdirp,
 	download,
-	clearfolder,
-	PATH,
-	OS
+	clearfolder
 ) {
 
 	var get = Ember.get;
@@ -61,21 +65,21 @@ define([
 
 		config  : alias( "metadata.config" ),
 
-		failsRequests: alias( "config.notification-max-fails-requests" ),
-		failsChannels: alias( "config.notification-max-fails-channels" ),
-		interval     : alias( "config.notification-interval" ),
-		intervalRetry: alias( "config.notification-interval-retry" ),
-		intervalError: alias( "config.notification-interval-error" ),
+		failsRequests: alias( "config.notification.max-fails-requests" ),
+		failsChannels: alias( "config.notification.max-fails-channels" ),
+		interval     : alias( "config.notification.interval" ),
+		intervalRetry: alias( "config.notification.interval-retry" ),
+		intervalError: alias( "config.notification.interval-error" ),
 
 		// cache related properties
 		cacheDir: function() {
-			var dir = get( this, "config.notification-cache-dir" );
-			return PATH.resolve( dir.replace( "{os-tmpdir}", OS.tmpdir() ) );
-		}.property( "config.notification-cache-dir" ),
+			var dir = get( this, "config.notification.cache-dir" );
+			return platform.tmpdir( dir );
+		}.property( "config.notification.cache-dir" ),
 		cacheTime: function() {
-			var days = get( this, "config.notification-cache-time" );
+			var days = get( this, "config.notification.cache-time" );
 			return days * 24 * 3600 * 1000;
-		}.property( "config.notification-cache-time" ),
+		}.property( "config.notification.cache-time" ),
 
 		// use the app icon as group icon
 		iconGroup: function() {
@@ -227,13 +231,11 @@ define([
 		check: function() {
 			if ( !get( this, "running" ) ) { return; }
 
-			var store = get( this, "store" );
-			store.query( "twitchStreamsFollowed", {
+			get( this, "store" ).query( "twitchStreamsFollowed", {
 				limit: 100
 			})
-				.then(function( streams ) {
-					return streams.mapBy( "stream" );
-				})
+				.then( toArray )
+				.then( mapBy( "stream" ) )
 				.then( this.queryCallback.bind( this ) )
 				.then( this.stripDisabledChannels.bind( this ) )
 				.then( this.prepareNotifications.bind( this ) )
@@ -425,7 +427,6 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
-			// FIXME: refactor global openBrowser actions
 			var applicationController = getOwner( this ).lookup( "controller:application" );
 
 			switch( settings ) {
@@ -446,7 +447,7 @@ define([
 						var channel = get( stream, "channel.id" );
 						if ( url && channel ) {
 							url = url.replace( "{channel}", channel );
-							applicationController.send( "openBrowser", url );
+							openBrowser( url );
 						}
 					}
 			}

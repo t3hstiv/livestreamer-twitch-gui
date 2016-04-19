@@ -1,6 +1,6 @@
 define([
-	"utils/denodify",
-	"utils/fs/stat",
+	"utils/node/denodify",
+	"utils/node/fs/stat",
 	"commonjs!path",
 	"commonjs!fs"
 ], function(
@@ -10,10 +10,15 @@ define([
 	FS
 ) {
 
-	var fs_readdir = denodify( FS.readdir );
-	var fs_unlink  = denodify( FS.unlink );
+	var fsReaddir = denodify( FS.readdir );
+	var fsUnlink  = denodify( FS.unlink );
 
 
+	/**
+	 * @param {String[]} list
+	 * @param {Function} fn
+	 * @returns {Promise}
+	 */
 	function execBatchAndIgnoreRejected( list, fn ) {
 		// additional fn arguments
 		var args = [].slice.call( arguments, 2 );
@@ -34,8 +39,14 @@ define([
 	}
 
 
-	return function clearfolder( dir, threshold ) {
-		return fs_readdir( dir )
+	/**
+	 * Delete files in a directory optionally filtered by age
+	 * @param {String} dir
+	 * @param {Number?} threshold
+	 * @returns {Promise}
+	 */
+	function clearfolder( dir, threshold ) {
+		return fsReaddir( dir )
 			.then(function( files ) {
 				// prepend dir path
 				files = files.map(function( file ) {
@@ -49,13 +60,16 @@ define([
 				var now = new Date();
 				return execBatchAndIgnoreRejected( files, stat, function( stat ) {
 					return stat.isFile()
-						&& now - stat.mtime > threshold;
+					    && now - stat.mtime > threshold;
 				});
 			})
 			// delete all matched files
 			.then(function( files ) {
-				return execBatchAndIgnoreRejected( files, fs_unlink );
+				return execBatchAndIgnoreRejected( files, fsUnlink );
 			});
-	};
+	}
+
+
+	return clearfolder;
 
 });

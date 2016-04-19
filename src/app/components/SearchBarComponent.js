@@ -1,8 +1,10 @@
 define([
 	"Ember",
+	"utils/getStreamFromUrl",
 	"hbs!templates/components/SearchBarComponent"
 ], function(
 	Ember,
+	getStreamFromUrl,
 	layout
 ) {
 
@@ -10,6 +12,7 @@ define([
 	var set = Ember.set;
 	var readOnly = Ember.computed.readOnly;
 	var sort = Ember.computed.sort;
+
 
 	return Ember.Component.extend({
 		store   : Ember.inject.service(),
@@ -27,7 +30,6 @@ define([
 
 		numKeepItems: readOnly( "metadata.config.search-history-size" ),
 		reQuery: /^[a-z0-9]{3,}/i,
-		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 
 		showDropdown: false,
 		filter: "all",
@@ -140,9 +142,9 @@ define([
 				var query  = get( this, "query" ).trim();
 				var filter = get( this, "filter" );
 
-				var match = this.reChannelURL.exec( query );
-				if ( match ) {
-					query  = match[ 1 ];
+				var stream = getStreamFromUrl( query );
+				if ( stream ) {
+					query  = stream;
 					filter = "channels";
 				}
 
