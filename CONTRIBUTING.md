@@ -17,6 +17,8 @@ Please read the following guidelines before you [report an issue][issues]:
 
 Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs.
 
+Using the [ISSUE_TEMPLATE.md] [issue template] when reporting an issue is appreciated.
+
 
 ## Feature requests
 
@@ -66,7 +68,7 @@ Good pull requests - patches, improvements, new features - are a fantastic help.
 
 Please adhere to the coding conventions used throughout a project (indentation, white space, accurate comments, etc.) and any other requirements (such as test coverage).
 
-Adhering to the following this process is the best way to get your work included in the project:
+Adhering to the following process is the best way to get your work included in the project:
 
 1. [Fork][howto-fork] the project, clone your fork, and configure the remotes:
    ```bash
